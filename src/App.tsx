@@ -13,6 +13,7 @@ import { GameCompletionScreen } from './components/GameCompletionScreen'
 import { ScoreProvider, useScore } from './contexts/ScoreContext'
 import { QuestProvider, useQuest } from './contexts/QuestContext'
 import bgSound from './assets/bg-sound.mp3'
+import music from './assets/music.mp3'
 import './App.css'
 
 type ActiveGame = 'none' | 'package-sorting' | 'courier-delivery' | 'package-delivery' | 'pub' | 'quiz'
@@ -29,19 +30,31 @@ function AppContent() {
 
   // Spustit hudbu při načtení hry
   useEffect(() => {
-    audioRef.current = new Audio(bgSound)
+    // Náhodně vybrat jednu z písniček
+    const musicTracks = [bgSound, music]
+    const randomTrack = musicTracks[Math.floor(Math.random() * musicTracks.length)]
+    
+    audioRef.current = new Audio(randomTrack)
     audioRef.current.loop = true
     audioRef.current.volume = 0.3 // Nastavit hlasitost na 30%
     
+    console.log(`🎵 Vybrána hudba: ${randomTrack === bgSound ? 'bg-sound.mp3' : 'music.mp3'}`)
+    
+    let musicStarted = false
+    
     // Pokus o přehrání hudby po interakci uživatele
     const playAudio = async () => {
+      if (musicStarted) return
+      
       try {
         if (audioRef.current) {
           await audioRef.current.play()
-          console.log('Hudba se spustila! 🎵')
+          musicStarted = true
+          console.log('🎶 Hudba spuštěna!')
         }
-      } catch (error) {
-        console.log('Čekám na interakci pro spuštění hudby...', error)
+      } catch {
+        // Toto je normální - prohlížeč čeká na interakci uživatele
+        console.log('🔇 Čekám na kliknutí nebo stisknutí klávesy pro spuštění hudby...')
       }
     }
     
@@ -50,10 +63,12 @@ function AppContent() {
     
     // Pokud autoplay selže, čekat na první interakci
     const handleFirstInteraction = () => {
-      playAudio()
-      // Odebrat event listenery po prvním spuštění
-      document.removeEventListener('click', handleFirstInteraction)
-      document.removeEventListener('keydown', handleFirstInteraction)
+      if (!musicStarted) {
+        playAudio()
+        // Odebrat event listenery po prvním spuštění
+        document.removeEventListener('click', handleFirstInteraction)
+        document.removeEventListener('keydown', handleFirstInteraction)
+      }
     }
     
     document.addEventListener('click', handleFirstInteraction)
