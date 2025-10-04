@@ -2,7 +2,7 @@ import { useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 
 interface CameraControllerProps {
-  carRef: React.RefObject<THREE.Group>
+  carRef: React.RefObject<THREE.Group | null>
 }
 
 export function CameraController({ carRef }: CameraControllerProps) {

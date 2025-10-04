@@ -3,34 +3,63 @@ import { Ground } from './Ground'
 import { Environment } from './Environment'
 import { CameraController } from './CameraController'
 import { InteractiveDepot } from './InteractiveDepot'
+import { DeliveryLocker } from './DeliveryLocker'
+import { QuestNavigator } from './QuestNavigator'
 import { useRef } from 'react'
 import * as THREE from 'three'
 import { useFrame } from '@react-three/fiber'
 import { useInteraction } from '../hooks/useInteraction'
+import { useQuest } from '../contexts/QuestContext'
 
 interface SceneProps {
-  onInteraction: () => void
+  onDepotInteraction: () => void
+  onLockerInteraction: () => void
 }
 
-export default function Scene({ onInteraction }: SceneProps) {
+export default function Scene({ onDepotInteraction, onLockerInteraction }: SceneProps) {
   const carRef = useRef<THREE.Group>(null)
   const depotPosition = new THREE.Vector3(50, 0, 0) // Na silnici X=50
+  const lockerPosition = new THREE.Vector3(-50, 0, 0) // Na druhé straně
+  const { quests } = useQuest()
 
-  const { isNearTarget, canInteract, checkDistance, resetInteraction } = useInteraction({
+  // Interakce pro depot (package sorting)
+  const depot = useInteraction({
     carRef,
     targetPosition: depotPosition,
     interactionDistance: 3
   })
 
-  // Kontrola vzdálenosti každý frame
-  useFrame(() => {
-    checkDistance()
+  // Interakce pro delivery locker
+  const locker = useInteraction({
+    carRef,
+    targetPosition: lockerPosition,
+    interactionDistance: 3
   })
 
-  // Když hráč interaguje, zavoláme callback a resetujeme
-  if (canInteract) {
-    onInteraction()
-    resetInteraction()
+  // Kontrola vzdálenosti každý frame
+  useFrame(() => {
+    depot.checkDistance()
+    locker.checkDistance()
+  })
+
+  // Zjistit, jestli jsou questy dokončené
+  const quest1 = quests.find(q => q.id === 'quest-1')
+  const quest2 = quests.find(q => q.id === 'quest-2')
+
+  // Když hráč interaguje s depotem - jen pokud quest-1 není dokončený
+  if (depot.canInteract) {
+    if (!quest1?.completed) {
+      onDepotInteraction()
+    }
+    depot.resetInteraction()
+  }
+
+  // Když hráč interaguje s lockerem - jen pokud quest-2 není dokončený
+  if (locker.canInteract) {
+    if (!quest2?.completed) {
+      onLockerInteraction()
+    }
+    locker.resetInteraction()
   }
 
   return (
@@ -59,8 +88,14 @@ export default function Scene({ onInteraction }: SceneProps) {
       {/* Autíčko */}
       <Car ref={carRef} />
 
-      {/* Interaktivní depot */}
+      {/* Quest navigace - 3D šipka nad autem */}
+      <QuestNavigator carRef={carRef} />
+
+      {/* Interaktivní depot (Package Sorting) */}
       <InteractiveDepot position={[depotPosition.x, depotPosition.y, depotPosition.z]} />
+
+      {/* Výdejní box (Courier Delivery) */}
+      <DeliveryLocker position={[lockerPosition.x, lockerPosition.y, lockerPosition.z]} />
 
       {/* Podlaha a krajina */}
       <Ground />
@@ -68,13 +103,25 @@ export default function Scene({ onInteraction }: SceneProps) {
       {/* Prostředí - stromy, budovy, dekorace */}
       <Environment />
 
-      {/* Indikátor interakce */}
-      {isNearTarget && (
+      {/* Indikátor interakce u depotu - jen když není dokončený */}
+      {depot.isNearTarget && !quest1?.completed && (
         <mesh position={[depotPosition.x, 4.5, depotPosition.z]}>
           <sphereGeometry args={[0.2, 16, 16]} />
           <meshStandardMaterial 
             color="#FFD700" 
             emissive="#FFD700" 
+            emissiveIntensity={1}
+          />
+        </mesh>
+      )}
+
+      {/* Indikátor interakce u lockeru - jen když není dokončený */}
+      {locker.isNearTarget && !quest2?.completed && (
+        <mesh position={[lockerPosition.x, 4.5, lockerPosition.z]}>
+          <sphereGeometry args={[0.2, 16, 16]} />
+          <meshStandardMaterial 
+            color="#3498DB" 
+            emissive="#3498DB" 
             emissiveIntensity={1}
           />
         </mesh>

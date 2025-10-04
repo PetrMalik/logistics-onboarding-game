@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import * as THREE from 'three'
 
 interface UseInteractionProps {
-  carRef: React.RefObject<THREE.Group>
+  carRef: React.RefObject<THREE.Group | null>
   targetPosition: THREE.Vector3
   interactionDistance?: number
 }
