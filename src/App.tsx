@@ -55,6 +55,9 @@ function App() {
           <div>S - Vzad</div>
           <div>A - Doleva</div>
           <div>D - Doprava</div>
+          <div style={{ marginTop: '10px', color: '#FF6B6B', fontWeight: 'bold' }}>
+            Shift - Turbo 🚀
+          </div>
           <div style={{ marginTop: '10px', color: '#FFD700', fontWeight: 'bold' }}>
             E - Interakce (u depotu)
           </div>
