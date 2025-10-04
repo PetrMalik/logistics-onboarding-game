@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Canvas } from '@react-three/fiber'
 import Scene from './components/Scene'
 import { PackageSortingGame } from './components/PackageSortingGame'
@@ -12,6 +12,8 @@ import { DebugPanel } from './components/DebugPanel'
 import { GameCompletionScreen } from './components/GameCompletionScreen'
 import { ScoreProvider, useScore } from './contexts/ScoreContext'
 import { QuestProvider, useQuest } from './contexts/QuestContext'
+import bgSound from './assets/bg-sound.mp3'
+import music from './assets/music.mp3'
 import './App.css'
 
 type ActiveGame = 'none' | 'package-sorting' | 'courier-delivery' | 'package-delivery' | 'pub' | 'quiz'
@@ -21,32 +23,114 @@ function AppContent() {
   const [carResetTrigger, setCarResetTrigger] = useState(0)
   const { quests, resetQuests } = useQuest()
   const { resetScore } = useScore()
+  const audioRef = useRef<HTMLAudioElement | null>(null)
   
   // Zkontrolovat, jestli jsou všechny questy dokončené
   const allQuestsCompleted = quests.every(q => q.completed)
 
+  // Spustit hudbu při načtení hry
+  useEffect(() => {
+    // Náhodně vybrat jednu z písniček
+    const musicTracks = [bgSound, music]
+    const randomTrack = musicTracks[Math.floor(Math.random() * musicTracks.length)]
+    
+    audioRef.current = new Audio(randomTrack)
+    audioRef.current.loop = true
+    audioRef.current.volume = 0.3 // Nastavit hlasitost na 30%
+    
+    console.log(`🎵 Vybrána hudba: ${randomTrack === bgSound ? 'bg-sound.mp3' : 'music.mp3'}`)
+    
+    let musicStarted = false
+    
+    // Pokus o přehrání hudby po interakci uživatele
+    const playAudio = async () => {
+      if (musicStarted) return
+      
+      try {
+        if (audioRef.current) {
+          await audioRef.current.play()
+          musicStarted = true
+          console.log('🎶 Hudba spuštěna!')
+        }
+      } catch {
+        // Toto je normální - prohlížeč čeká na interakci uživatele
+        console.log('🔇 Čekám na kliknutí nebo stisknutí klávesy pro spuštění hudby...')
+      }
+    }
+    
+    // Pokusit se přehrát automaticky
+    playAudio()
+    
+    // Pokud autoplay selže, čekat na první interakci
+    const handleFirstInteraction = () => {
+      if (!musicStarted) {
+        playAudio()
+        // Odebrat event listenery po prvním spuštění
+        document.removeEventListener('click', handleFirstInteraction)
+        document.removeEventListener('keydown', handleFirstInteraction)
+      }
+    }
+    
+    document.addEventListener('click', handleFirstInteraction)
+    document.addEventListener('keydown', handleFirstInteraction)
+    
+    // Cleanup při unmount
+    return () => {
+      document.removeEventListener('click', handleFirstInteraction)
+      document.removeEventListener('keydown', handleFirstInteraction)
+      if (audioRef.current) {
+        audioRef.current.pause()
+        audioRef.current = null
+      }
+    }
+  }, [])
+
   const handleDepotInteraction = () => {
     setActiveGame('package-sorting')
+    // Ztlumit hudbu při spuštění minihry
+    if (audioRef.current) {
+      audioRef.current.volume = 0.05
+    }
   }
 
   const handleLockerInteraction = () => {
     setActiveGame('courier-delivery')
+    // Ztlumit hudbu při spuštění minihry
+    if (audioRef.current) {
+      audioRef.current.volume = 0.05
+    }
   }
 
   const handleShopInteraction = () => {
     setActiveGame('package-delivery')
+    // Ztlumit hudbu při spuštění minihry
+    if (audioRef.current) {
+      audioRef.current.volume = 0.05
+    }
   }
 
   const handleQuizInteraction = () => {
     setActiveGame('quiz')
+    // Ztlumit hudbu při spuštění minihry
+    if (audioRef.current) {
+      audioRef.current.volume = 0.05
+    }
   }
 
   const handlePubInteraction = () => {
     setActiveGame('pub')
+    // Ztlumit hudbu při vstupu do hospody
+    if (audioRef.current) {
+      audioRef.current.volume = 0.05
+    }
   }
 
   const handleCloseGame = () => {
     setActiveGame('none')
+    // Vrátit hlasitost hudby po zavření minihry
+    if (audioRef.current) {
+      audioRef.current.volume = 0.3
+    }
   }
 
   return (

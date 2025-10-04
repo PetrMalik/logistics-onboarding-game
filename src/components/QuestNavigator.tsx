@@ -11,7 +11,8 @@ interface QuestNavigatorProps {
 const QUEST_LOCATIONS: Record<string, THREE.Vector3> = {
   'quest-1': new THREE.Vector3(50, 0, 0),    // Depot
   'quest-2': new THREE.Vector3(-50, 0, 0),   // Delivery Locker
-  'quest-3': new THREE.Vector3(0, 0, 50),    // Nějaká další lokace (můžeš upravit)
+  'quest-3': new THREE.Vector3(0, 0, 50),    // Trafika
+  'quest-4': new THREE.Vector3(50, 0, 0),    // Návrat na depo
 }
 
 export function QuestNavigator({ carRef }: QuestNavigatorProps) {

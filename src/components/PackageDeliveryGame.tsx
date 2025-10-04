@@ -146,12 +146,12 @@ export function PackageDeliveryGame({ onClose }: PackageDeliveryGameProps) {
       <div className="package-sorting-overlay">
         <div className="package-sorting-modal storytelling">
           <div className="story-content">
-            <h2>📦 Výdej balíků na výdejním místě</h2>
+            <h2>📦 Doručení balíků na výdejní místo</h2>
             <div className="story-text">
               <p>
                 {hasPlayedBefore ? 
                   "Další zastávka - výdejní místo! Máte další balíky k výdeji." :
-                  "Dorazili jste do vídejního místa! Máte ve vozidle 20 balíků, ale na tomto místě potřebujete vydat pouze 5 konkrétních balíků."
+                  "Dorazili jste do výdejního místa! Máte ve vozidle 20 balíků, ale na tomto místě potřebujete vydat pouze 5 konkrétních balíků."
                 }
               </p>
               <p>
@@ -182,7 +182,7 @@ export function PackageDeliveryGame({ onClose }: PackageDeliveryGameProps) {
       <div className="package-sorting-overlay">
         <div className="package-sorting-modal game">
           <div className="game-header">
-            <h2>📦 Výdej balíků - Trafika</h2>
+            <h2>📦 Doručení balíků na výdejní místo</h2>
             <div className="required-packages">
               <h3>Balíky k výdeji (čísla):</h3>
               <div className="required-numbers">
@@ -193,7 +193,7 @@ export function PackageDeliveryGame({ onClose }: PackageDeliveryGameProps) {
                       selectedPackages.some(pkg => pkg.number === num) ? 'found' : ''
                     }`}
                   >
-                    #{num}
+                    {num}
                   </span>
                 ))}
               </div>
@@ -216,7 +216,7 @@ export function PackageDeliveryGame({ onClose }: PackageDeliveryGameProps) {
                     draggable
                     onDragStart={() => handleDragStart(pkg, false)}
                   >
-                    <div className="package-number">#{pkg.number}</div>
+                    <div className="package-number">{pkg.number}</div>
                   </div>
                 ))}
               </div>
@@ -224,7 +224,7 @@ export function PackageDeliveryGame({ onClose }: PackageDeliveryGameProps) {
 
             {/* Oblast výdeje */}
             <div className="sorting-area">
-              <h3>🏪 Výdejní oblast trafiky ({selectedPackages.length}/{REQUIRED_PACKAGES})</h3>
+              <h3>🏪 Výdejní místo ({selectedPackages.length}/{REQUIRED_PACKAGES})</h3>
               <div 
                 className="packages-container delivery-packages"
                 onDrop={handleDropToDeliveryArea}
@@ -237,27 +237,23 @@ export function PackageDeliveryGame({ onClose }: PackageDeliveryGameProps) {
                     draggable
                     onDragStart={() => handleDragStart(pkg, true)}
                   >
-                    <div className="package-number">#{pkg.number}</div>
-                    {requiredNumbers.includes(pkg.number) ? (
-                      <div className="status-icon">✅</div>
-                    ) : (
-                      <div className="status-icon">❌</div>
-                    )}
+                    <div className="package-number">{pkg.number}</div>
                   </div>
                 ))}
               </div>
+              
+              <button 
+                className="finish-delivery-button"
+                onClick={handleFinishDelivery}
+                disabled={selectedPackages.length === 0}
+              >
+                Dokončit výdej
+              </button>
             </div>
           </div>
 
           <div className="game-controls">
-            <button 
-              className="finish-button"
-              onClick={handleFinishDelivery}
-              disabled={selectedPackages.length === 0}
-            >
-              Dokončit výdej
-            </button>
-            <button className="close-button" onClick={onClose}>
+            <button className="close-button-bottom" onClick={onClose}>
               Zavřít
             </button>
           </div>
