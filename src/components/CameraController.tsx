@@ -12,28 +12,21 @@ export function CameraController({ carRef }: CameraControllerProps) {
     if (!carRef.current) return
 
     const carPosition = carRef.current.position
-    const carRotation = carRef.current.rotation.y
 
-    // Pozice kamery za autem
-    const offset = new THREE.Vector3(
-      Math.sin(carRotation) * -6,
-      5,
-      Math.cos(carRotation) * -6
-    )
-
+    // Kamera z dálky a ze strany (více izometrický pohled jako Bruno Simon)
     const targetCameraPosition = new THREE.Vector3(
-      carPosition.x + offset.x,
-      offset.y,
-      carPosition.z + offset.z
+      carPosition.x + 8,  // Ze strany (doprava)
+      10,                 // Výš nad scénou
+      carPosition.z + 8   // Zezadu
     )
 
-    // Plynulý pohyb kamery
-    camera.position.lerp(targetCameraPosition, 0.1)
+    // Velmi plynulý pohyb kamery
+    camera.position.lerp(targetCameraPosition, 0.05)
     
-    // Kamera se dívá na auto
+    // Kamera se dívá mírně před auto (ne přímo na něj)
     const lookAtPosition = new THREE.Vector3(
       carPosition.x,
-      carPosition.y + 0.5,
+      carPosition.y,
       carPosition.z
     )
     camera.lookAt(lookAtPosition)
