@@ -1,9 +1,15 @@
 import { useState, useEffect } from 'react'
+import { useScore } from '../contexts/ScoreContext'
+import { useQuest } from '../contexts/QuestContext'
 import './PackageSortingGame.css'
 
 interface Package {
   id: number
   route: string
+}
+
+interface DraggedPackage extends Package {
+  fromVan: boolean
 }
 
 interface PackageSortingGameProps {
@@ -13,6 +19,7 @@ interface PackageSortingGameProps {
 const ROUTES = ['A', 'B', 'C', 'D', 'E']
 const TOTAL_PACKAGES = 12
 const REQUIRED_PACKAGES = 4
+const POINTS_PER_CORRECT_PACKAGE = 25 // Body za každý správný balík
 
 type GameStep = 'storytelling' | 'game' | 'result'
 
@@ -21,9 +28,12 @@ export function PackageSortingGame({ onClose }: PackageSortingGameProps) {
   const [assignedRoute, setAssignedRoute] = useState('')
   const [packages, setPackages] = useState<Package[]>([])
   const [selectedPackages, setSelectedPackages] = useState<Package[]>([])
-  const [draggedPackage, setDraggedPackage] = useState<Package | null>(null)
+  const [draggedPackage, setDraggedPackage] = useState<DraggedPackage | null>(null)
   const [correctCount, setCorrectCount] = useState(0)
   const [hasPlayedBefore, setHasPlayedBefore] = useState(false)
+  const [earnedPoints, setEarnedPoints] = useState(0)
+  const { addScore } = useScore()
+  const { completeCurrentQuest, currentQuest } = useQuest()
 
   // Inicializace hry - náhodné balíky a trasa
   useEffect(() => {
@@ -60,7 +70,7 @@ export function PackageSortingGame({ onClose }: PackageSortingGameProps) {
   }, [])
 
   const handleDragStart = (pkg: Package, fromVan: boolean) => {
-    setDraggedPackage({ ...pkg, fromVan } as any)
+    setDraggedPackage({ ...pkg, fromVan })
   }
 
   const handleDragOver = (e: React.DragEvent) => {
@@ -69,7 +79,7 @@ export function PackageSortingGame({ onClose }: PackageSortingGameProps) {
 
   const handleDropToVan = (e: React.DragEvent) => {
     e.preventDefault()
-    if (!draggedPackage || (draggedPackage as any).fromVan) return
+    if (!draggedPackage || draggedPackage.fromVan) return
     
     if (selectedPackages.length < REQUIRED_PACKAGES) {
       setSelectedPackages([...selectedPackages, draggedPackage])
@@ -80,7 +90,7 @@ export function PackageSortingGame({ onClose }: PackageSortingGameProps) {
 
   const handleDropToWarehouse = (e: React.DragEvent) => {
     e.preventDefault()
-    if (!draggedPackage || !(draggedPackage as any).fromVan) return
+    if (!draggedPackage || !draggedPackage.fromVan) return
     
     setPackages([...packages, draggedPackage])
     setSelectedPackages(selectedPackages.filter(p => p.id !== draggedPackage.id))
@@ -98,6 +108,20 @@ export function PackageSortingGame({ onClose }: PackageSortingGameProps) {
   const handleCheckResult = () => {
     const correct = selectedPackages.filter(p => p.route === assignedRoute).length
     setCorrectCount(correct)
+    
+    // Výpočet bodů
+    const points = correct * POINTS_PER_CORRECT_PACKAGE
+    setEarnedPoints(points)
+    
+    // Přidání bodů do globálního skóre
+    // Minihra je považována za dokončenou, pokud je alespoň 1 správný balík
+    addScore(points, correct > 0)
+    
+    // Dokončit aktuální quest po dokončení minihry (bez ohledu na výsledek)
+    if (currentQuest?.id === 'quest-1') {
+      completeCurrentQuest()
+    }
+    
     setCurrentStep('result')
     setHasPlayedBefore(true)
   }
@@ -105,6 +129,7 @@ export function PackageSortingGame({ onClose }: PackageSortingGameProps) {
   const handlePlayAgain = () => {
     setCurrentStep('storytelling')
     setSelectedPackages([])
+    setEarnedPoints(0)
     
     // Nová hra
     const randomRoute = ROUTES[Math.floor(Math.random() * ROUTES.length)]
@@ -276,6 +301,12 @@ export function PackageSortingGame({ onClose }: PackageSortingGameProps) {
               <div className="result-score">
                 <div className="score-big">{correctCount} / {REQUIRED_PACKAGES}</div>
                 <div className="score-text">správně vybraných balíků</div>
+              </div>
+              
+              <div className="earned-points">
+                <div className="points-icon">⭐</div>
+                <div className="points-value">+{earnedPoints}</div>
+                <div className="points-label">bodů</div>
               </div>
               
               {correctCount === REQUIRED_PACKAGES ? (
