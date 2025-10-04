@@ -511,4 +511,178 @@
   }
 }
 
+/* PIN Notification Overlay */
+.pin-notification-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  backdrop-filter: blur(8px);
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.pin-notification-box {
+  background: white;
+  border-radius: 20px;
+  padding: 40px;
+  max-width: 500px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  animation: slideUp 0.4s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.pin-notification-icon {
+  font-size: 64px;
+  margin-bottom: 20px;
+  animation: bounce 1s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.pin-notification-box h2 {
+  font-size: 28px;
+  color: #333;
+  margin: 0 0 15px 0;
+}
+
+.pin-notification-box > p {
+  color: #666;
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 30px;
+}
+
+.pin-display-large {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 30px;
+  border-radius: 15px;
+  margin: 30px 0;
+  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+}
+
+.pin-label {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.pin-value {
+  font-size: 56px;
+  font-weight: bold;
+  color: white;
+  letter-spacing: 12px;
+  font-family: 'Courier New', monospace;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  margin-top: 10px;
+}
+
+.pin-warning {
+  background: #fff3e0;
+  border-left: 4px solid #ff9800;
+  padding: 20px;
+  border-radius: 10px;
+  margin: 25px 0;
+  text-align: left;
+}
+
+.pin-warning strong {
+  color: #e65100;
+  font-size: 16px;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.pin-warning p {
+  color: #555;
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 5px 0 0 0;
+}
+
+.pin-confirm-button {
+  background: #4CAF50;
+  color: white;
+  border: none;
+  padding: 18px 40px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  width: 100%;
+  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+}
+
+.pin-confirm-button:hover {
+  background: #45a049;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+}
+
+.pin-confirm-button:active {
+  transform: translateY(0);
+}
+
+/* Responzivní design pro PIN notifikaci */
+@media (max-width: 768px) {
+  .pin-notification-box {
+    padding: 30px 20px;
+  }
+
+  .pin-notification-icon {
+    font-size: 48px;
+  }
+
+  .pin-notification-box h2 {
+    font-size: 24px;
+  }
+
+  .pin-value {
+    font-size: 42px;
+    letter-spacing: 8px;
+  }
+
+  .pin-confirm-button {
+    padding: 16px 30px;
+    font-size: 15px;
+  }
+}
+
 

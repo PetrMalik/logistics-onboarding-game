@@ -10,7 +10,6 @@ interface CourierDeliveryGameProps {
 type GameStep = 'storytelling' | 'pin-input' | 'parcel-input' | 'locker-open' | 'result'
 type ErrorType = 'wrong-pin' | 'wrong-parcel' | null
 
-const CORRECT_PIN = '1234' // Předgenerovaný správný PIN
 const POINTS_FOR_DELIVERY = 50 // Body za úspěšné doručení
 
 export function CourierDeliveryGame({ onClose }: CourierDeliveryGameProps) {
@@ -22,7 +21,7 @@ export function CourierDeliveryGame({ onClose }: CourierDeliveryGameProps) {
   const [errorType, setErrorType] = useState<ErrorType>(null)
   const [earnedPoints, setEarnedPoints] = useState(0)
   const { addScore } = useScore()
-  const { completeCurrentQuest, currentQuest } = useQuest()
+  const { completeCurrentQuest, currentQuest, courierPin } = useQuest()
 
   // Vygeneruj náhodné 14místné číslo zásilky
   useEffect(() => {
@@ -110,7 +109,7 @@ export function CourierDeliveryGame({ onClose }: CourierDeliveryGameProps) {
 
   // Potvrzení PIN
   const handlePinSubmit = () => {
-    if (pinInput === CORRECT_PIN) {
+    if (pinInput === courierPin) {
       setErrorType(null)
       setCurrentStep('parcel-input')
     } else {
@@ -178,7 +177,7 @@ export function CourierDeliveryGame({ onClose }: CourierDeliveryGameProps) {
                 <li>Vlož zásilku a zavři schránku</li>
               </ol>
               <div className="info-box">
-                <strong>💡 Tip:</strong> PIN a číslo zásilky najdeš na této obrazovce.
+                <strong>💡 Tip:</strong> Použij PIN, který jsi dostal po dokončení prvního úkolu. Číslo zásilky najdeš na další obrazovce.
               </div>
             </div>
             <button onClick={handleStartGame} className="primary-button">
@@ -194,7 +193,7 @@ export function CourierDeliveryGame({ onClose }: CourierDeliveryGameProps) {
             
             {!errorType && (
               <div className="info-display">
-                <p>Tvůj kurýrní PIN: <strong className="highlight">{CORRECT_PIN}</strong></p>
+                <p>Zadej svůj 4místný kurýrní PIN</p>
               </div>
             )}
 

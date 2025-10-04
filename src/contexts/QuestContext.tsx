@@ -15,6 +15,8 @@ interface QuestContextType {
   currentQuest: Quest | null
   completeCurrentQuest: () => void
   resetQuests: () => void
+  courierPin: string | null
+  generateCourierPin: () => string
 }
 
 const QuestContext = createContext<QuestContextType | undefined>(undefined)
@@ -62,6 +64,9 @@ export function QuestProvider({ children }: QuestProviderProps) {
     return INITIAL_QUESTS
   })
 
+  // State pro kurýrní PIN
+  const [courierPin, setCourierPin] = useState<string | null>(null)
+
   // Automatické ukládání do localStorage při změně
   useEffect(() => {
     localStorage.setItem(QUEST_STORAGE_KEY, JSON.stringify(quests))
@@ -104,13 +109,27 @@ export function QuestProvider({ children }: QuestProviderProps) {
    */
   const resetQuests = () => {
     setQuests(INITIAL_QUESTS)
+    setCourierPin(null)
+  }
+
+  /**
+   * Vygeneruje náhodný 4místný PIN pro kurýra
+   */
+  const generateCourierPin = (): string => {
+    const pin = Array.from({ length: 4 }, () => 
+      Math.floor(Math.random() * 10)
+    ).join('')
+    setCourierPin(pin)
+    return pin
   }
 
   const value = {
     quests,
     currentQuest,
     completeCurrentQuest,
-    resetQuests
+    resetQuests,
+    courierPin,
+    generateCourierPin
   }
 
   return <QuestContext.Provider value={value}>{children}</QuestContext.Provider>
