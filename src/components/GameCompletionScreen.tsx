@@ -57,11 +57,7 @@ export function GameCompletionScreen() {
 
           <div className="completion-message">
             <p>
-              <strong>Nyní jsi připraven pracovat jako profesionální kurýr!</strong>
-            </p>
-            <p>
-              Naučil ses správně třídit zásilky, používat výdejní boxy a zvládl jsi všechny důležité 
-              postupy v logistice. Děkujeme za hru!
+              <strong>Nyní jsi připraven. Vítej v logistickém hubu!</strong>
             </p>
           </div>
 
