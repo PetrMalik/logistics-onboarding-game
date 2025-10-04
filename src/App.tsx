@@ -1,34 +1,38 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { Canvas } from '@react-three/fiber'
+import Scene from './components/Scene'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div style={{ width: '100vw', height: '100vh', margin: 0, padding: 0 }}>
+      <Canvas
+        shadows
+        camera={{ position: [0, 5, 10], fov: 60 }}
+        style={{ background: '#FFB88C' }}
+      >
+        <Scene />
+      </Canvas>
+      
+      {/* Ovládání nápověda */}
+      <div style={{
+        position: 'absolute',
+        bottom: '20px',
+        left: '20px',
+        color: 'white',
+        fontFamily: 'Arial, sans-serif',
+        fontSize: '16px',
+        textShadow: '2px 2px 4px rgba(0,0,0,0.5)',
+        background: 'rgba(0,0,0,0.3)',
+        padding: '15px',
+        borderRadius: '10px'
+      }}>
+        <div><strong>Ovládání:</strong></div>
+        <div>W - Vpřed</div>
+        <div>S - Vzad</div>
+        <div>A - Doleva</div>
+        <div>D - Doprava</div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    </div>
   )
 }
 
