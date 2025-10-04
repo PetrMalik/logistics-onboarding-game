@@ -1,8 +1,20 @@
+import { useState } from 'react'
 import { Canvas } from '@react-three/fiber'
 import Scene from './components/Scene'
+import { PackageSortingGame } from './components/PackageSortingGame'
 import './App.css'
 
 function App() {
+  const [showMiniGame, setShowMiniGame] = useState(false)
+
+  const handleInteraction = () => {
+    setShowMiniGame(true)
+  }
+
+  const handleCloseMiniGame = () => {
+    setShowMiniGame(false)
+  }
+
   return (
     <div style={{ width: '100vw', height: '100vh', margin: 0, padding: 0 }}>
       <Canvas
@@ -10,7 +22,7 @@ function App() {
         camera={{ position: [8, 10, 8], fov: 50 }}
         style={{ background: '#FFB88C' }}
       >
-        <Scene />
+        <Scene onInteraction={handleInteraction} />
       </Canvas>
       
       {/* Ovládání nápověda */}
@@ -31,7 +43,13 @@ function App() {
         <div>S - Vzad</div>
         <div>A - Doleva</div>
         <div>D - Doprava</div>
+        <div style={{ marginTop: '10px', color: '#FFD700', fontWeight: 'bold' }}>
+          E - Interakce (u depotu)
+        </div>
       </div>
+
+      {/* Mini hra */}
+      {showMiniGame && <PackageSortingGame onClose={handleCloseMiniGame} />}
     </div>
   )
 }
