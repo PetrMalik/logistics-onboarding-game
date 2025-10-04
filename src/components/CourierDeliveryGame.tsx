@@ -139,11 +139,6 @@ export function CourierDeliveryGame({ onClose }: CourierDeliveryGameProps) {
     // Dokončit quest-2 po dokončení minihry
     if (currentQuest?.id === 'quest-2') {
       completeCurrentQuest()
-      // Quest-3 se automaticky dokončí hned po quest-2
-      // (quest-3 se odemkne a my ho hned dokončíme)
-      setTimeout(() => {
-        completeCurrentQuest()
-      }, 100)
     }
     
     setCurrentStep('result')

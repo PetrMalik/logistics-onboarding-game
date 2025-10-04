@@ -212,7 +212,7 @@ export function PackageDeliveryGame({ onClose }: PackageDeliveryGameProps) {
                 {packages.map(pkg => (
                   <div
                     key={pkg.id}
-                    className={`package ${requiredNumbers.includes(pkg.number) ? 'required' : ''}`}
+                    className="package"
                     draggable
                     onDragStart={() => handleDragStart(pkg, false)}
                   >

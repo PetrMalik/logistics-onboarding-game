@@ -4,20 +4,22 @@ import Scene from './components/Scene'
 import { PackageSortingGame } from './components/PackageSortingGame'
 import { CourierDeliveryGame } from './components/CourierDeliveryGame'
 import { PackageDeliveryGame } from './components/PackageDeliveryGame'
+import { PubModal } from './components/PubModal'
 import { QuizGame } from './components/QuizGame'
 import { ScoreDisplay } from './components/ScoreDisplay'
 import { QuestList } from './components/QuestList'
 import { DebugPanel } from './components/DebugPanel'
 import { GameCompletionScreen } from './components/GameCompletionScreen'
-import { ScoreProvider } from './contexts/ScoreContext'
+import { ScoreProvider, useScore } from './contexts/ScoreContext'
 import { QuestProvider, useQuest } from './contexts/QuestContext'
 import './App.css'
 
-type ActiveGame = 'none' | 'package-sorting' | 'courier-delivery' | 'package-delivery' | 'quiz'
+type ActiveGame = 'none' | 'package-sorting' | 'courier-delivery' | 'package-delivery' | 'pub' | 'quiz'
 
 function AppContent() {
   const [activeGame, setActiveGame] = useState<ActiveGame>('none')
-  const { quests } = useQuest()
+  const { quests, resetQuests } = useQuest()
+  const { resetScore } = useScore()
   
   // Zkontrolovat, jestli jsou všechny questy dokončené
   const allQuestsCompleted = quests.every(q => q.completed)
@@ -38,6 +40,10 @@ function AppContent() {
     setActiveGame('quiz')
   }
 
+  const handlePubInteraction = () => {
+    setActiveGame('pub')
+  }
+
   const handleCloseGame = () => {
     setActiveGame('none')
   }
@@ -53,6 +59,7 @@ function AppContent() {
           onDepotInteraction={handleDepotInteraction}
           onLockerInteraction={handleLockerInteraction}
           onShopInteraction={handleShopInteraction}
+          onPubInteraction={handlePubInteraction}
           onQuizInteraction={handleQuizInteraction}
         />
       </Canvas>
@@ -102,6 +109,15 @@ function AppContent() {
       {/* Package Delivery Mini Game */}
       {activeGame === 'package-delivery' && (
         <PackageDeliveryGame onClose={handleCloseGame} />
+      )}
+
+      {/* Pub Modal - restartuje hru */}
+      {activeGame === 'pub' && (
+        <PubModal onRestart={() => { 
+          resetQuests() // Resetovat questy
+          resetScore() // Resetovat skóre
+          handleCloseGame() // Zavřít modal
+        }} />
       )}
 
       {/* Quiz Game */}

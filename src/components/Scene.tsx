@@ -5,6 +5,7 @@ import { CameraController } from './CameraController'
 import { InteractiveDepot } from './InteractiveDepot'
 import { InteractiveShop } from './InteractiveShop'
 import { DeliveryLocker } from './DeliveryLocker'
+import { Pub } from './Pub'
 import { QuestNavigator } from './QuestNavigator'
 import { useRef } from 'react'
 import * as THREE from 'three'
@@ -16,14 +17,16 @@ interface SceneProps {
   onDepotInteraction: () => void
   onLockerInteraction: () => void
   onShopInteraction: () => void
+  onPubInteraction: () => void
   onQuizInteraction: () => void
 }
 
-export default function Scene({ onDepotInteraction, onLockerInteraction, onShopInteraction, onQuizInteraction }: SceneProps) {
+export default function Scene({ onDepotInteraction, onLockerInteraction, onShopInteraction, onPubInteraction, onQuizInteraction }: SceneProps) {
   const carRef = useRef<THREE.Group>(null)
   const depotPosition = new THREE.Vector3(50, 0, 0) // Na silnici X=50
   const lockerPosition = new THREE.Vector3(-50, 0, 0) // Na druhé straně
   const tabacoPosition = new THREE.Vector3(0, 0, 50) // Na třetí straně
+  const pubPosition = new THREE.Vector3(25, 0, 25) // Hospoda na křižovatce
   const { quests } = useQuest()
 
   // Interakce pro depot (package sorting)
@@ -46,11 +49,18 @@ export default function Scene({ onDepotInteraction, onLockerInteraction, onShopI
     interactionDistance: 3
   })
 
+  const pub = useInteraction({
+    carRef,
+    targetPosition: pubPosition,
+    interactionDistance: 3
+  })
+
   // Kontrola vzdálenosti každý frame
   useFrame(() => {
     depot.checkDistance()
     locker.checkDistance()
     tabaco.checkDistance()
+    pub.checkDistance()
   })
 
   // Zjistit, jestli jsou questy dokončené
@@ -85,6 +95,11 @@ export default function Scene({ onDepotInteraction, onLockerInteraction, onShopI
       onShopInteraction ()
     }
     tabaco.resetInteraction()
+  }
+
+  // Když hráč interaguje s hospodou - automaticky při průjezdu
+  if (pub.isNearTarget) {
+    onPubInteraction()
   }
 
   return (
@@ -123,6 +138,9 @@ export default function Scene({ onDepotInteraction, onLockerInteraction, onShopI
       <DeliveryLocker position={[lockerPosition.x, lockerPosition.y, lockerPosition.z]} />
 
       <InteractiveShop position={[tabacoPosition.x, tabacoPosition.y, tabacoPosition.z]} />
+
+      {/* Hospoda - past na silnici */}
+      <Pub position={[pubPosition.x, pubPosition.y, pubPosition.z]} />
 
       {/* Podlaha a krajina */}
       <Ground />

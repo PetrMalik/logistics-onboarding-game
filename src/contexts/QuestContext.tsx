@@ -43,8 +43,8 @@ const INITIAL_QUESTS: Quest[] = [
   },
  {
     id: 'quest-3',
-    title: 'Doruč zásilku do obchodu',
-    description: 'Dokonči celou rozvozovou trasu',
+    title: 'Vydej balíky v trafice',
+    description: 'Vydej správné balíky podle čísel v trafice',
     completed: false,
     locked: true
   },
@@ -115,6 +115,7 @@ export function QuestProvider({ children }: QuestProviderProps) {
    * Resetuje všechny questy na výchozí stav
    */
   const resetQuests = () => {
+    localStorage.removeItem(QUEST_STORAGE_KEY) // Vymazat uložený stav
     setQuests(INITIAL_QUESTS)
     setCourierPin(null)
   }
