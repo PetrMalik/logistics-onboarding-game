@@ -1,11 +1,11 @@
-import { useRef, forwardRef } from 'react'
+import { useRef, forwardRef, useEffect, useCallback } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
 import { useCarControls } from '../hooks/useCarControls'
 import { getValidPosition } from '../utils/roadSystem'
 
-export const Car = forwardRef<THREE.Group>((props, ref) => {
+export const Car = forwardRef<THREE.Group, { onResetTrigger?: number }>((props, ref) => {
   const internalRef = useRef<THREE.Group>(null)
   const carRef = (ref as React.MutableRefObject<THREE.Group>) || internalRef
   
@@ -16,6 +16,23 @@ export const Car = forwardRef<THREE.Group>((props, ref) => {
   
   const velocity = useRef(0)
   const rotation = useRef(0)
+
+  // Reset pozice a rychlosti auta
+  const resetPosition = useCallback(() => {
+    if (carRef.current) {
+      carRef.current.position.set(0, 0.5, 0)
+      carRef.current.rotation.y = 0
+      velocity.current = 0
+      rotation.current = 0
+    }
+  }, [carRef])
+
+  // Sledování onResetTrigger prop pro resetování
+  useEffect(() => {
+    if (props.onResetTrigger !== undefined && props.onResetTrigger > 0) {
+      resetPosition()
+    }
+  }, [props.onResetTrigger, resetPosition])
 
   useFrame((_, delta) => {
     if (!carRef.current) return

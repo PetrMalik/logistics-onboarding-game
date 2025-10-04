@@ -1,4 +1,5 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
+import { createContext, useContext, useState, useEffect } from 'react'
+import type { ReactNode } from 'react'
 
 const QUEST_STORAGE_KEY = 'logistics-game-quests'
 
@@ -41,7 +42,7 @@ const INITIAL_QUESTS: Quest[] = [
     completed: false,
     locked: true
   },
- {
+  {
     id: 'quest-3',
     title: 'Vydej balíky v trafice',
     description: 'Vydej správné balíky podle čísel v trafice',
@@ -147,6 +148,7 @@ export function QuestProvider({ children }: QuestProviderProps) {
  * Hook pro použití quest systému v komponentách
  * Musí být použit uvnitř QuestProvider
  */
+// eslint-disable-next-line react-refresh/only-export-components
 export function useQuest() {
   const context = useContext(QuestContext)
   if (context === undefined) {

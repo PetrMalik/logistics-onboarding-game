@@ -11,6 +11,7 @@ type GameStep = 'storytelling' | 'pin-input' | 'parcel-input' | 'locker-open' | 
 type ErrorType = 'wrong-pin' | 'wrong-parcel' | null
 
 const POINTS_FOR_DELIVERY = 50 // Body za úspěšné doručení
+const DEBUG_PIN = '9999' // Debug PIN pro testování
 
 export function CourierDeliveryGame({ onClose }: CourierDeliveryGameProps) {
   const [currentStep, setCurrentStep] = useState<GameStep>('storytelling')
@@ -109,7 +110,8 @@ export function CourierDeliveryGame({ onClose }: CourierDeliveryGameProps) {
 
   // Potvrzení PIN
   const handlePinSubmit = () => {
-    if (pinInput === courierPin) {
+    // Akceptuj buď správný courierPin nebo debug PIN 9999
+    if (pinInput === courierPin || pinInput === DEBUG_PIN) {
       setErrorType(null)
       setCurrentStep('parcel-input')
     } else {
@@ -377,16 +379,6 @@ export function CourierDeliveryGame({ onClose }: CourierDeliveryGameProps) {
               <div className="points-earned">
                 <div className="points-label">Získané body:</div>
                 <div className="points-value">+{earnedPoints}</div>
-              </div>
-              
-              <div className="summary-box">
-                <h3>📋 Shrnutí:</h3>
-                <ul>
-                  <li>✓ Přihlášení kurýra (PIN)</li>
-                  <li>✓ Skenování zásilky</li>
-                  <li>✓ Otevření schránky č. {openLockerNumber}</li>
-                  <li>✓ Zavření schránky</li>
-                </ul>
               </div>
             </div>
             <button onClick={onClose} className="primary-button">

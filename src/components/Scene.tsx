@@ -19,9 +19,10 @@ interface SceneProps {
   onShopInteraction: () => void
   onPubInteraction: () => void
   onQuizInteraction: () => void
+  carResetTrigger?: number
 }
 
-export default function Scene({ onDepotInteraction, onLockerInteraction, onShopInteraction, onPubInteraction, onQuizInteraction }: SceneProps) {
+export default function Scene({ onDepotInteraction, onLockerInteraction, onShopInteraction, onPubInteraction, onQuizInteraction, carResetTrigger }: SceneProps) {
   const carRef = useRef<THREE.Group>(null)
   const depotPosition = new THREE.Vector3(50, 0, 0) // Na silnici X=50
   const lockerPosition = new THREE.Vector3(-50, 0, 0) // Na druhé straně
@@ -126,7 +127,7 @@ export default function Scene({ onDepotInteraction, onLockerInteraction, onShopI
       <CameraController carRef={carRef} />
 
       {/* Autíčko */}
-      <Car ref={carRef} />
+      <Car ref={carRef} onResetTrigger={carResetTrigger} />
 
       {/* Quest navigace - 3D šipka nad autem */}
       <QuestNavigator carRef={carRef} />

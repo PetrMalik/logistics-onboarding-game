@@ -18,6 +18,7 @@ type ActiveGame = 'none' | 'package-sorting' | 'courier-delivery' | 'package-del
 
 function AppContent() {
   const [activeGame, setActiveGame] = useState<ActiveGame>('none')
+  const [carResetTrigger, setCarResetTrigger] = useState(0)
   const { quests, resetQuests } = useQuest()
   const { resetScore } = useScore()
   
@@ -61,6 +62,7 @@ function AppContent() {
           onShopInteraction={handleShopInteraction}
           onPubInteraction={handlePubInteraction}
           onQuizInteraction={handleQuizInteraction}
+          carResetTrigger={carResetTrigger}
         />
       </Canvas>
       
@@ -116,6 +118,7 @@ function AppContent() {
         <PubModal onRestart={() => { 
           resetQuests() // Resetovat questy
           resetScore() // Resetovat skóre
+          setCarResetTrigger(prev => prev + 1) // Resetovat pozici auta
           handleCloseGame() // Zavřít modal
         }} />
       )}
