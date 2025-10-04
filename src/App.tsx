@@ -2,21 +2,28 @@ import { useState } from 'react'
 import { Canvas } from '@react-three/fiber'
 import Scene from './components/Scene'
 import { PackageSortingGame } from './components/PackageSortingGame'
+import { CourierDeliveryGame } from './components/CourierDeliveryGame'
 import { ScoreDisplay } from './components/ScoreDisplay'
 import { QuestList } from './components/QuestList'
 import { ScoreProvider } from './contexts/ScoreContext'
 import { QuestProvider } from './contexts/QuestContext'
 import './App.css'
 
-function App() {
-  const [showMiniGame, setShowMiniGame] = useState(false)
+type ActiveGame = 'none' | 'package-sorting' | 'courier-delivery'
 
-  const handleInteraction = () => {
-    setShowMiniGame(true)
+function App() {
+  const [activeGame, setActiveGame] = useState<ActiveGame>('none')
+
+  const handleDepotInteraction = () => {
+    setActiveGame('package-sorting')
   }
 
-  const handleCloseMiniGame = () => {
-    setShowMiniGame(false)
+  const handleLockerInteraction = () => {
+    setActiveGame('courier-delivery')
+  }
+
+  const handleCloseGame = () => {
+    setActiveGame('none')
   }
 
   return (
@@ -28,7 +35,10 @@ function App() {
             camera={{ position: [8, 10, 8], fov: 50 }}
             style={{ background: '#FFB88C' }}
           >
-            <Scene onInteraction={handleInteraction} />
+            <Scene 
+              onDepotInteraction={handleDepotInteraction}
+              onLockerInteraction={handleLockerInteraction}
+            />
           </Canvas>
           
           {/* Quest List */}
@@ -63,8 +73,15 @@ function App() {
           </div>
         </div>
 
-          {/* Mini hra */}
-          {showMiniGame && <PackageSortingGame onClose={handleCloseMiniGame} />}
+          {/* Package Sorting Mini Game */}
+          {activeGame === 'package-sorting' && (
+            <PackageSortingGame onClose={handleCloseGame} />
+          )}
+
+          {/* Courier Delivery Mini Game */}
+          {activeGame === 'courier-delivery' && (
+            <CourierDeliveryGame onClose={handleCloseGame} />
+          )}
         </div>
       </QuestProvider>
     </ScoreProvider>

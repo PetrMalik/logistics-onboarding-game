@@ -28,14 +28,14 @@ const INITIAL_QUESTS: Quest[] = [
   {
     id: 'quest-1',
     title: 'Přijeď na depo',
-    description: 'Najdi depot a naskladni zásilky',
+    description: 'Najdi depot a naskladni zásilky do dodávky',
     completed: false,
     locked: false // První úkol je odemčený
   },
   {
     id: 'quest-2',
-    title: 'Doruč zásilku na Box',
-    description: 'Přiveď zásilku k bodu výdeje Box',
+    title: 'Doruč zásilku na výdejní box',
+    description: 'Doruč zásilku jako kurýr do výdejního boxu',
     completed: false,
     locked: true
   },
