@@ -146,12 +146,12 @@ export function PackageDeliveryGame({ onClose }: PackageDeliveryGameProps) {
       <div className="package-sorting-overlay">
         <div className="package-sorting-modal storytelling">
           <div className="story-content">
-            <h2>📦 Výdej balíků v trafice</h2>
+            <h2>📦 Výdej balíků na výdejním místě</h2>
             <div className="story-text">
               <p>
                 {hasPlayedBefore ? 
-                  "Další zastávka - trafika! Máte další balíky k výdeji." :
-                  "Dorazili jste k trafice! Máte ve vozidle 20 balíků, ale na tomto místě potřebujete vydat pouze 5 konkrétních balíků."
+                  "Další zastávka - výdejní místo! Máte další balíky k výdeji." :
+                  "Dorazili jste do vídejního místa! Máte ve vozidle 20 balíků, ale na tomto místě potřebujete vydat pouze 5 konkrétních balíků."
                 }
               </p>
               <p>

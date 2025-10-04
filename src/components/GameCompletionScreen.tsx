@@ -3,12 +3,13 @@ import { useQuest } from '../contexts/QuestContext'
 import './GameCompletionScreen.css'
 
 export function GameCompletionScreen() {
-  const { score } = useScore()
+  const { score, resetScore } = useScore()
   const { resetQuests } = useQuest()
 
   const handleRestart = () => {
     if (window.confirm('Opravdu chceš začít hru znovu od začátku?')) {
       resetQuests()
+      resetScore()
       window.location.reload()
     }
   }
@@ -56,11 +57,7 @@ export function GameCompletionScreen() {
 
           <div className="completion-message">
             <p>
-              <strong>Nyní jsi připraven pracovat jako profesionální kurýr!</strong>
-            </p>
-            <p>
-              Naučil ses správně třídit zásilky, používat výdejní boxy a zvládl jsi všechny důležité 
-              postupy v logistice. Děkujeme za hru!
+              <strong>Nyní jsi připraven. Vítej v logistickém hubu!</strong>
             </p>
           </div>
 

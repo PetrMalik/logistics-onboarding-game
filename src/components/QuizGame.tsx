@@ -17,28 +17,28 @@ type GameStep = 'storytelling' | 'quiz' | 'result'
 
 const QUIZ_QUESTIONS: QuizQuestion[] = [
   {
-    question: 'Kolik číslic má validní číslo zásilky?',
-    options: ['6 číslic', '10 číslic', '14 číslic'],
-    correctAnswer: 2
-  },
-  {
-    question: 'Kolik balíků kurýr běžně nahrává do dodávky na jednu trasu?',
-    options: ['2 balíky', '4 balíky', '8 balíků'],
+    question: 'Kde začíná cesta balíku?',
+    options: ['U zákazníka', 'Na depu', 'Ve výdejním boxu'],
     correctAnswer: 1
   },
   {
-    question: 'Kolik číslic má kurýrní PIN pro otevření výdejního boxu?',
-    options: ['4 číslice', '6 číslic', '8 číslic'],
+    question: 'Co je parcel number?',
+    options: ['Adresa příjemce', 'Jedinečné číslo balíku', 'Jméno kurýra'],
+    correctAnswer: 1
+  },
+  {
+    question: 'Co se děje na výdejním místě?',
+    options: ['Balíky čekají na zákazníky', 'Balíky se vyrábějí', 'Balíky mění trasu'],
     correctAnswer: 0
   },
   {
-    question: 'Podle čeho se třídí zásilky na depotu?',
-    options: ['Podle velikosti', 'Podle rozvozové trasy', 'Podle hmotnosti'],
-    correctAnswer: 1
+    question: 'Jak si zákazník vyzvedne balík na boxu?',
+    options: ['Pomocí kódu, který otevře přihrádku', 'Přímou fyzickou žádostí u pracovníka', 'Pošle e-mail pracovníkovi depa'],
+    correctAnswer: 0
   },
   {
-    question: 'Co musí kurýr zkontrolovat před vložením balíku do boxu?',
-    options: ['Barvu balíku', 'Číslo zásilky na balíku', 'Teplotu boxu'],
+    question: 'Co musí kurýr udělat na cestě k zákazníkovi?',
+    options: ['Roztřídit balíky do depa', 'Doručit balíky podle plánované trasy', 'Kontrolovat skladové zásoby'],
     correctAnswer: 1
   }
 ]
@@ -157,10 +157,10 @@ export function QuizGame({ onClose }: QuizGameProps) {
             <h2>🎓 Závěrečný test</h2>
             <div className="quiz-story">
               <p>
-                <strong>Dobrá práce, kurýře!</strong>
+                <strong>Dobrá práce!</strong>
               </p>
               <p>
-                Prošel jsi základním školením a teď je čas ověřit, co ses naučil.
+                Prošel jsi základním onboardingem a teď je čas ověřit, co ses naučil.
               </p>
               <p>
                 <strong>Odpověz na 5 otázek během 60 sekund.</strong>

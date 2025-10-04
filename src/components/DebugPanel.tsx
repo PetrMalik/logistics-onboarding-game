@@ -5,7 +5,7 @@ import './DebugPanel.css'
 
 export function DebugPanel() {
   const [isOpen, setIsOpen] = useState(false)
-  const { quests, completeCurrentQuest, resetQuests } = useQuest()
+  const { quests, completeCurrentQuest, resetQuests, courierPin } = useQuest()
   const { score, resetScore } = useScore()
 
   const handleCompleteQuest = () => {
@@ -46,6 +46,31 @@ export function DebugPanel() {
               <h4>Skóre</h4>
               <div className="debug-info">
                 <strong>Aktuální skóre:</strong> {score} bodů
+              </div>
+            </div>
+
+            {/* Courier PIN */}
+            <div className="debug-section">
+              <h4>🔐 Kurýrní PIN</h4>
+              <div className="debug-info">
+                {courierPin ? (
+                  <>
+                    <strong>Validní PIN:</strong> 
+                    <span className="debug-pin">{courierPin}</span>
+                  </>
+                ) : (
+                  <span className="debug-warning">
+                    PIN ještě nebyl vygenerován. 
+                    <br />
+                    Dokonči první quest pro získání PINu.
+                  </span>
+                )}
+                <div className="debug-pin-info">
+                  <strong>🛠️ Debug PIN:</strong> 
+                  <span className="debug-pin debug-pin-small">9999</span>
+                  <br />
+                  <small>(Vždy funguje pro testování)</small>
+                </div>
               </div>
             </div>
 
