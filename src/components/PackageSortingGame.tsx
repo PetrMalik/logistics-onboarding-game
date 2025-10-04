@@ -69,8 +69,10 @@ export function PackageSortingGame({ onClose }: PackageSortingGameProps) {
   const [correctCount, setCorrectCount] = useState(0)
   const [hasPlayedBefore, setHasPlayedBefore] = useState(false)
   const [earnedPoints, setEarnedPoints] = useState(0)
+  const [showPinNotification, setShowPinNotification] = useState(false)
+  const [generatedPin, setGeneratedPin] = useState('')
   const { addScore } = useScore()
-  const { completeCurrentQuest, currentQuest } = useQuest()
+  const { completeCurrentQuest, currentQuest, generateCourierPin } = useQuest()
 
   // Inicializace hry - náhodné balíky a trasa
   useEffect(() => {
@@ -407,10 +409,50 @@ export function PackageSortingGame({ onClose }: PackageSortingGameProps) {
                 <button className="play-again-button" onClick={handlePlayAgain}>
                   Hrát znovu
                 </button>
-                <button className="continue-button" onClick={onClose}>
+                <button className="continue-button" onClick={() => {
+                  // Pokud je quest-1 dokončený a ještě jsme nezobrazili PIN
+                  if (currentQuest?.id === 'quest-2' && !showPinNotification && !generatedPin) {
+                    const pin = generateCourierPin()
+                    setGeneratedPin(pin)
+                    setShowPinNotification(true)
+                  } else {
+                    onClose()
+                  }
+                }}>
                   Pokračovat ve hře
                 </button>
               </div>
+            </div>
+          </div>
+        )}
+
+        {/* PIN NOTIFICATION OVERLAY */}
+        {showPinNotification && (
+          <div className="pin-notification-overlay">
+            <div className="pin-notification-box">
+              <div className="pin-notification-icon">🔐</div>
+              <h2>Důležitá informace!</h2>
+              <p>Byl ti přidělen kurýrní PIN pro přístup k výdejním boxům.</p>
+              
+              <div className="pin-display-large">
+                <div className="pin-label">Tvůj kurýrní PIN:</div>
+                <div className="pin-value">{generatedPin}</div>
+              </div>
+              
+              <div className="pin-warning">
+                <strong>⚠️ Zapamatuj si tento PIN!</strong>
+                <p>Budeš ho potřebovat pro přístup k výdejnímu boxu. PIN se po zavření této notifikace již nezobrazí.</p>
+              </div>
+              
+              <button 
+                className="pin-confirm-button" 
+                onClick={() => {
+                  setShowPinNotification(false)
+                  onClose()
+                }}
+              >
+                Rozumím, zapamatoval jsem si PIN
+              </button>
             </div>
           </div>
         )}
