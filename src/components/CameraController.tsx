@@ -13,11 +13,11 @@ export function CameraController({ carRef }: CameraControllerProps) {
 
     const carPosition = carRef.current.position
 
-    // Kamera z dálky a ze strany (více izometrický pohled jako Bruno Simon)
+    // Kamera z dálky a ze strany (více izometrický pohled pro větší mapu)
     const targetCameraPosition = new THREE.Vector3(
-      carPosition.x + 8,  // Ze strany (doprava)
-      10,                 // Výš nad scénou
-      carPosition.z + 8   // Zezadu
+      carPosition.x + 12,  // Ze strany (doprava) - více dál
+      15,                  // Výš nad scénou pro lepší přehled
+      carPosition.z + 12   // Zezadu - více dál
     )
 
     // Velmi plynulý pohyb kamery

@@ -2,6 +2,7 @@ import { useRef, forwardRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import { useCarControls } from '../hooks/useCarControls'
+import { getValidPosition } from '../utils/roadSystem'
 
 export const Car = forwardRef<THREE.Group>((props, ref) => {
   const internalRef = useRef<THREE.Group>(null)
@@ -72,13 +73,30 @@ export const Car = forwardRef<THREE.Group>((props, ref) => {
 
     // === APLIKACE POHYBU ===
     const angle = rotation.current
-    carRef.current.position.x += Math.sin(angle) * velocity.current * delta
-    carRef.current.position.z += Math.cos(angle) * velocity.current * delta
+    const newX = carRef.current.position.x + Math.sin(angle) * velocity.current * delta
+    const newZ = carRef.current.position.z + Math.cos(angle) * velocity.current * delta
+
+    // Použití vylepšeného systému pro validaci pozice
+    const validPosition = getValidPosition(
+      carRef.current.position.x, 
+      carRef.current.position.z, 
+      newX, 
+      newZ
+    )
+    
+    // Aplikace validní pozice
+    carRef.current.position.x = validPosition.x
+    carRef.current.position.z = validPosition.z
     carRef.current.rotation.y = angle
 
-    // Omezení pohybu v rámci mapy
-    carRef.current.position.x = Math.max(-25, Math.min(25, carRef.current.position.x))
-    carRef.current.position.z = Math.max(-25, Math.min(25, carRef.current.position.z))
+    // Pokud se pozice změnila kvůli omezení, zpomal auto
+    if (validPosition.x !== newX || validPosition.z !== newZ) {
+      velocity.current = Math.max(0, velocity.current * 0.7)
+    }
+
+    // Globální omezení pro mapu (bezpečnostní omezení)
+    carRef.current.position.x = Math.max(-100, Math.min(100, carRef.current.position.x))
+    carRef.current.position.z = Math.max(-100, Math.min(100, carRef.current.position.z))
   })
 
   return (

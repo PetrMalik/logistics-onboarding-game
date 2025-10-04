@@ -14,7 +14,7 @@ interface SceneProps {
 
 export default function Scene({ onInteraction }: SceneProps) {
   const carRef = useRef<THREE.Group>(null)
-  const depotPosition = new THREE.Vector3(10, 0, 10)
+  const depotPosition = new THREE.Vector3(50, 0, 0) // Na silnici X=50
 
   const { isNearTarget, canInteract, checkDistance, resetInteraction } = useInteraction({
     carRef,
@@ -35,17 +35,17 @@ export default function Scene({ onInteraction }: SceneProps) {
 
   return (
     <>
-      {/* Osvětlení */}
+      {/* Osvětlení - upravené pro větší plochu */}
       <ambientLight intensity={0.6} />
       <directionalLight
-        position={[10, 20, 10]}
+        position={[20, 40, 20]}
         intensity={1}
         castShadow
-        shadow-mapSize={[2048, 2048]}
-        shadow-camera-left={-20}
-        shadow-camera-right={20}
-        shadow-camera-top={20}
-        shadow-camera-bottom={-20}
+        shadow-mapSize={[4096, 4096]}
+        shadow-camera-left={-120}
+        shadow-camera-right={120}
+        shadow-camera-top={120}
+        shadow-camera-bottom={-120}
       />
       <hemisphereLight
         color="#FFD4A3"
