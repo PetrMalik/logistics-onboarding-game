@@ -362,7 +362,7 @@ export function CourierDeliveryGame({ onClose }: CourierDeliveryGameProps) {
             <div className="action-prompt">
               <p>📦 Vlož zásilku do schránky a zavři dvířka.</p>
               <button onClick={handleCloseLocker} className="primary-button">
-                Zavřít schránku
+                Vložit zásilku a zavřít schránku
               </button>
             </div>
           </div>

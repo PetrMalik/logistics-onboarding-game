@@ -7,6 +7,7 @@ import { InteractiveShop } from './InteractiveShop'
 import { DeliveryLocker } from './DeliveryLocker'
 import { Pub } from './Pub'
 import { QuestNavigator } from './QuestNavigator'
+import { PackageCollector } from './PackageCollector'
 import { useRef } from 'react'
 import * as THREE from 'three'
 import { useFrame } from '@react-three/fiber'
@@ -131,6 +132,9 @@ export default function Scene({ onDepotInteraction, onLockerInteraction, onShopI
 
       {/* Quest navigace - 3D šipka nad autem */}
       <QuestNavigator carRef={carRef} />
+
+      {/* Sběratelné zásilky na silnicích */}
+      <PackageCollector carRef={carRef} packageCount={14} />
 
       {/* Interaktivní depot (Package Sorting) */}
       <InteractiveDepot position={[depotPosition.x, depotPosition.y, depotPosition.z]} />
