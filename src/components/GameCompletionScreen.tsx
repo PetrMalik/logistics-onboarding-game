@@ -3,12 +3,13 @@ import { useQuest } from '../contexts/QuestContext'
 import './GameCompletionScreen.css'
 
 export function GameCompletionScreen() {
-  const { score } = useScore()
+  const { score, resetScore } = useScore()
   const { resetQuests } = useQuest()
 
   const handleRestart = () => {
     if (window.confirm('Opravdu chceš začít hru znovu od začátku?')) {
       resetQuests()
+      resetScore()
       window.location.reload()
     }
   }

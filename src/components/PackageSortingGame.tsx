@@ -224,11 +224,6 @@ export function PackageSortingGame({ onClose }: PackageSortingGameProps) {
     <div className="game-modal">
       <div className="game-container">
         <div className="game-header">
-          <h2>
-            {currentStep === 'storytelling' && 'Depo'}
-            {currentStep === 'game' && 'Nakládka balíků'}
-            {currentStep === 'result' && 'Vyhodnocení'}
-          </h2>
           <button className="close-button" onClick={onClose}>✕</button>
         </div>
 
@@ -278,7 +273,7 @@ export function PackageSortingGame({ onClose }: PackageSortingGameProps) {
             <div className="game-content">
               {/* Skladiště s balíky */}
               <div className="warehouse-section">
-                <h3>Skladiště ({packages.length} balíků)</h3>
+                <h3>Depo - ({packages.length} balíků)</h3>
                 <div 
                   className="packages-grid"
                   onDragOver={handleDragOver}
@@ -301,7 +296,6 @@ export function PackageSortingGame({ onClose }: PackageSortingGameProps) {
 
               {/* Dodávka */}
               <div className="van-section">
-                <h3>Dodávka ({selectedPackages.length}/{REQUIRED_PACKAGES})</h3>
                 <div 
                   className="van-container"
                   onDragOver={handleDragOver}
@@ -315,7 +309,7 @@ export function PackageSortingGame({ onClose }: PackageSortingGameProps) {
                   {selectedPackages.map(pkg => (
                     <div
                       key={pkg.id}
-                      className="package package-small"
+                      className="package"
                       draggable
                       onDragStart={() => handleDragStart(pkg, true)}
                     >
@@ -326,14 +320,12 @@ export function PackageSortingGame({ onClose }: PackageSortingGameProps) {
                   ))}
                 </div>
                 
-                {selectedPackages.length === REQUIRED_PACKAGES && (
-                  <button 
-                    className="check-button"
-                    onClick={handleCheckResult}
-                  >
-                    Zkontrolovat výběr
-                  </button>
-                )}
+                <button 
+                  className="check-button"
+                  onClick={handleCheckResult}
+                >
+                Dokončit nakládku
+                </button>
               </div>
             </div>
           </>
@@ -398,7 +390,6 @@ export function PackageSortingGame({ onClose }: PackageSortingGameProps) {
                             {' '}pro <strong>jinou trasu</strong>.
                           </p>
                         )}
-                        <p>Zkontroluj pozorně štítky a čísla zásilek!</p>
                       </div>
                     </div>
                   )
