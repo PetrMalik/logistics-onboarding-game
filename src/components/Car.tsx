@@ -1,5 +1,6 @@
 import { useRef, forwardRef } from 'react'
 import { useFrame } from '@react-three/fiber'
+import { useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
 import { useCarControls } from '../hooks/useCarControls'
 import { getValidPosition } from '../utils/roadSystem'
@@ -7,6 +8,9 @@ import { getValidPosition } from '../utils/roadSystem'
 export const Car = forwardRef<THREE.Group>((props, ref) => {
   const internalRef = useRef<THREE.Group>(null)
   const carRef = (ref as React.MutableRefObject<THREE.Group>) || internalRef
+  
+  // Načtení 3D modelu dodávky
+  const { scene } = useGLTF('/src/assets/models/dpd-van-red.glb')
   
   const { forward, backward, left, right, turbo } = useCarControls()
   
@@ -103,64 +107,20 @@ export const Car = forwardRef<THREE.Group>((props, ref) => {
 
   return (
     <group ref={carRef} position={[0, 0.5, 0]} {...props}>
-      {/* Karoserie */}
-      <mesh castShadow position={[0, 0.3, 0]}>
-        <boxGeometry args={[1.2, 0.5, 2]} />
-        <meshStandardMaterial color="#E85D4D" />
-      </mesh>
-
-      {/* Kabina */}
-      <mesh castShadow position={[0, 0.8, -0.2]}>
-        <boxGeometry args={[1, 0.6, 1]} />
-        <meshStandardMaterial color="#D94D3D" />
-      </mesh>
-
-      {/* Okna */}
-      <mesh position={[-0.45, 0.8, -0.2]}>
-        <boxGeometry args={[0.05, 0.4, 0.8]} />
-        <meshStandardMaterial color="#87CEEB" opacity={0.6} transparent />
-      </mesh>
-      <mesh position={[0.45, 0.8, -0.2]}>
-        <boxGeometry args={[0.05, 0.4, 0.8]} />
-        <meshStandardMaterial color="#87CEEB" opacity={0.6} transparent />
-      </mesh>
-
-      {/* Přední světla */}
-      <mesh position={[0.35, 0.35, 1.05]}>
-        <boxGeometry args={[0.2, 0.15, 0.1]} />
-        <meshStandardMaterial color="#FFF4E0" emissive="#FFF4E0" emissiveIntensity={0.3} />
-      </mesh>
-      <mesh position={[-0.35, 0.35, 1.05]}>
-        <boxGeometry args={[0.2, 0.15, 0.1]} />
-        <meshStandardMaterial color="#FFF4E0" emissive="#FFF4E0" emissiveIntensity={0.3} />
-      </mesh>
-
-      {/* Kola */}
-      <group>
-        {/* Přední levé */}
-        <mesh castShadow position={[-0.65, 0, 0.6]} rotation={[Math.PI / 2, 0, 0]}>
-          <cylinderGeometry args={[0.25, 0.25, 0.2, 16]} />
-          <meshStandardMaterial color="#2C2C2C" />
-        </mesh>
-        {/* Přední pravé */}
-        <mesh castShadow position={[0.65, 0, 0.6]} rotation={[Math.PI / 2, 0, 0]}>
-          <cylinderGeometry args={[0.25, 0.25, 0.2, 16]} />
-          <meshStandardMaterial color="#2C2C2C" />
-        </mesh>
-        {/* Zadní levé */}
-        <mesh castShadow position={[-0.65, 0, -0.6]} rotation={[Math.PI / 2, 0, 0]}>
-          <cylinderGeometry args={[0.25, 0.25, 0.2, 16]} />
-          <meshStandardMaterial color="#2C2C2C" />
-        </mesh>
-        {/* Zadní pravé */}
-        <mesh castShadow position={[0.65, 0, -0.6]} rotation={[Math.PI / 2, 0, 0]}>
-          <cylinderGeometry args={[0.25, 0.25, 0.2, 16]} />
-          <meshStandardMaterial color="#2C2C2C" />
-        </mesh>
-      </group>
+      {/* Načtený 3D model DPD dodávky */}
+      <primitive 
+        object={scene.clone()} 
+        castShadow
+        receiveShadow
+        rotation={[0, Math.PI, 0]}
+        scale={0.64}
+      />
     </group>
   )
 })
 
 Car.displayName = 'Car'
+
+// Preload 3D modelu pro lepší výkon
+useGLTF.preload('/src/assets/models/dpd-van-red.glb')
 
