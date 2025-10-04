@@ -47,6 +47,13 @@ const INITIAL_QUESTS: Quest[] = [
     description: 'Dokonči celou rozvozovou trasu',
     completed: false,
     locked: true
+  },
+  {
+    id: 'quest-4',
+    title: 'Vrať se na depo - Závěrečný test',
+    description: 'Ukaž, co ses naučil! Odpověz na 5 otázek během 60 sekund',
+    completed: false,
+    locked: true
   }
 ]
 

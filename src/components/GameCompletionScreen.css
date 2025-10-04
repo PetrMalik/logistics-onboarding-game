@@ -1,0 +1,228 @@
+.completion-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.completion-modal {
+  background: white;
+  border-radius: 25px;
+  padding: 0;
+  max-width: 650px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
+  animation: slideUpScale 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUpScale {
+  from {
+    transform: translateY(50px) scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+.completion-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 40px;
+  text-align: center;
+  border-radius: 25px 25px 0 0;
+}
+
+.completion-header h1 {
+  margin: 0;
+  font-size: 3em;
+  animation: bounce 1s ease-in-out;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.completion-content {
+  padding: 40px;
+  text-align: center;
+}
+
+.trophy-icon {
+  font-size: 5em;
+  margin: 20px 0;
+  animation: rotate3d 2s ease-in-out infinite;
+}
+
+@keyframes rotate3d {
+  0%, 100% { transform: rotateY(0deg); }
+  50% { transform: rotateY(180deg); }
+}
+
+.completion-content h2 {
+  color: #333;
+  font-size: 2em;
+  margin: 30px 0;
+  line-height: 1.4;
+}
+
+.completion-stats {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 30px;
+  border-radius: 15px;
+  margin: 30px 0;
+}
+
+.stat-item {
+  margin: 10px 0;
+}
+
+.stat-label {
+  font-size: 1.2em;
+  opacity: 0.9;
+  margin-bottom: 10px;
+}
+
+.stat-value {
+  font-size: 3.5em;
+  font-weight: bold;
+}
+
+.completion-achievements {
+  margin: 40px 0;
+  text-align: left;
+}
+
+.completion-achievements h3 {
+  color: #667eea;
+  font-size: 1.5em;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.achievement-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.achievement-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px 20px;
+  background: #e8f5e9;
+  border-radius: 12px;
+  border-left: 4px solid #27ae60;
+  animation: slideInRight 0.5s ease-out backwards;
+}
+
+.achievement-item:nth-child(1) { animation-delay: 0.1s; }
+.achievement-item:nth-child(2) { animation-delay: 0.2s; }
+.achievement-item:nth-child(3) { animation-delay: 0.3s; }
+.achievement-item:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(-30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.achievement-icon {
+  font-size: 1.5em;
+  color: #27ae60;
+}
+
+.achievement-item span:last-child {
+  flex: 1;
+  font-size: 1.1em;
+  color: #333;
+}
+
+.completion-message {
+  margin: 40px 0;
+  padding: 30px;
+  background: #f8f9fa;
+  border-radius: 15px;
+  text-align: left;
+}
+
+.completion-message p {
+  margin: 15px 0;
+  line-height: 1.8;
+  color: #555;
+  font-size: 1.05em;
+}
+
+.completion-message strong {
+  color: #333;
+  font-size: 1.1em;
+}
+
+.completion-actions {
+  margin-top: 30px;
+}
+
+.restart-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 18px 50px;
+  font-size: 1.3em;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  font-weight: 600;
+}
+
+.restart-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+}
+
+/* Scrollbar styling */
+.completion-modal::-webkit-scrollbar {
+  width: 8px;
+}
+
+.completion-modal::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.completion-modal::-webkit-scrollbar-thumb {
+  background: #667eea;
+  border-radius: 10px;
+}
+
+.completion-modal::-webkit-scrollbar-thumb:hover {
+  background: #764ba2;
+}
+

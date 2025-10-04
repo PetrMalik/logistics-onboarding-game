@@ -14,9 +14,10 @@ import { useQuest } from '../contexts/QuestContext'
 interface SceneProps {
   onDepotInteraction: () => void
   onLockerInteraction: () => void
+  onQuizInteraction: () => void
 }
 
-export default function Scene({ onDepotInteraction, onLockerInteraction }: SceneProps) {
+export default function Scene({ onDepotInteraction, onLockerInteraction, onQuizInteraction }: SceneProps) {
   const carRef = useRef<THREE.Group>(null)
   const depotPosition = new THREE.Vector3(50, 0, 0) // Na silnici X=50
   const lockerPosition = new THREE.Vector3(-50, 0, 0) // Na druhé straně
@@ -45,11 +46,17 @@ export default function Scene({ onDepotInteraction, onLockerInteraction }: Scene
   // Zjistit, jestli jsou questy dokončené
   const quest1 = quests.find(q => q.id === 'quest-1')
   const quest2 = quests.find(q => q.id === 'quest-2')
+  const quest4 = quests.find(q => q.id === 'quest-4')
 
-  // Když hráč interaguje s depotem - jen pokud quest-1 není dokončený
+  // Když hráč interaguje s depotem
   if (depot.canInteract) {
+    // Quest-1: Package Sorting
     if (!quest1?.completed) {
       onDepotInteraction()
+    }
+    // Quest-4: Quiz (návrat na depo)
+    else if (!quest4?.completed && !quest4?.locked) {
+      onQuizInteraction()
     }
     depot.resetInteraction()
   }
@@ -103,13 +110,13 @@ export default function Scene({ onDepotInteraction, onLockerInteraction }: Scene
       {/* Prostředí - stromy, budovy, dekorace */}
       <Environment />
 
-      {/* Indikátor interakce u depotu - jen když není dokončený */}
-      {depot.isNearTarget && !quest1?.completed && (
+      {/* Indikátor interakce u depotu - quest-1 nebo quest-4 */}
+      {depot.isNearTarget && (!quest1?.completed || (!quest4?.completed && !quest4?.locked)) && (
         <mesh position={[depotPosition.x, 4.5, depotPosition.z]}>
           <sphereGeometry args={[0.2, 16, 16]} />
           <meshStandardMaterial 
-            color="#FFD700" 
-            emissive="#FFD700" 
+            color={!quest1?.completed ? "#FFD700" : "#667eea"} 
+            emissive={!quest1?.completed ? "#FFD700" : "#667eea"} 
             emissiveIntensity={1}
           />
         </mesh>
