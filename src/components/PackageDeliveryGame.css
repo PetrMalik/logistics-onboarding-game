@@ -1,0 +1,359 @@
+/* PackageDeliveryGame CSS - Trafika minigra */
+
+.package-sorting-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+}
+
+.package-sorting-modal {
+  background: white;
+  border-radius: 20px;
+  padding: 30px;
+  max-width: 900px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 50px rgba(0, 0, 0, 0.3);
+}
+
+/* Storytelling phase styles */
+.package-sorting-modal.storytelling {
+  max-width: 600px;
+}
+
+.story-content {
+  text-align: center;
+}
+
+.story-content h2 {
+  color: #333;
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+.story-text {
+  text-align: left;
+  margin-bottom: 30px;
+}
+
+.story-text p {
+  margin-bottom: 15px;
+  line-height: 1.6;
+  color: #666;
+}
+
+.start-button {
+  background: #4CAF50;
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.start-button:hover {
+  background: #45a049;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+}
+
+/* Game phase styles */
+.package-sorting-modal.game {
+  max-width: 1000px;
+}
+
+.game-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #f0f0f0;
+  padding-bottom: 15px;
+}
+
+.game-header h2 {
+  margin: 0;
+  font-size: 28px;
+  color: #333;
+}
+
+.close-button {
+  background: #f0f0f0;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 24px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.close-button:hover {
+  background: #e0e0e0;
+  transform: scale(1.1);
+}
+
+.required-packages {
+  background: #fff3cd;
+  border: 2px solid #ffc107;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 20px;
+}
+
+.required-packages h3 {
+  margin: 0 0 10px 0;
+  color: #856404;
+  font-size: 18px;
+}
+
+.required-numbers {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.required-number {
+  background: #ffc107;
+  color: #856404;
+  padding: 8px 15px;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 16px;
+  min-width: 45px;
+  text-align: center;
+  transition: all 0.2s;
+}
+
+.required-number.completed {
+  background: #28a745;
+  color: white;
+}
+
+.game-area {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
+  min-height: 400px;
+}
+
+.van-area,
+.sorting-area {
+  border: 2px solid #ddd;
+  border-radius: 15px;
+  padding: 20px;
+  background: #f8f9fa;
+}
+
+.van-area h3,
+.sorting-area h3 {
+  margin: 0 0 15px 0;
+  font-size: 20px;
+  color: #555;
+  text-align: center;
+}
+
+.packages-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 10px;
+  min-height: 300px;
+  padding: 15px;
+  border: 2px dashed #ccc;
+  border-radius: 10px;
+  background: white;
+}
+
+.van-packages {
+  background: #e8f5e8;
+  border-color: #4CAF50;
+}
+
+.delivery-packages {
+  background: #fff3cd;
+  border-color: #ffc107;
+}
+
+.packages-container.drop-zone-active {
+  border-color: #007bff;
+  background: #e3f2fd;
+  transform: scale(1.02);
+}
+
+.package {
+  width: 70px;
+  height: 70px;
+  background: #8B4513;
+  border: 3px solid #654321;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  transition: all 0.2s;
+  position: relative;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.package:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.package:active {
+  cursor: grabbing;
+}
+
+.package.dragging {
+  opacity: 0.5;
+  transform: rotate(5deg);
+}
+
+.package.required {
+  border-color: #ffc107;
+  box-shadow: 0 0 10px rgba(255, 193, 7, 0.5);
+}
+
+.package.correct {
+  background: #28a745;
+  border-color: #1e7e34;
+}
+
+.package.incorrect {
+  background: #dc3545;
+  border-color: #c82333;
+}
+
+.package-number {
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+}
+
+.status-icon {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+/* Result phase styles */
+.package-sorting-modal.result {
+  max-width: 600px;
+}
+
+.result-content {
+  text-align: center;
+}
+
+.result-content h2 {
+  color: #333;
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+.score-display {
+  background: #e8f5e8;
+  border: 2px solid #4CAF50;
+  border-radius: 15px;
+  padding: 20px;
+  margin: 20px 0;
+}
+
+.score-display h3 {
+  color: #2e7d32;
+  font-size: 24px;
+  margin: 0 0 10px 0;
+}
+
+.score-breakdown {
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.final-buttons {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.play-again-button,
+.continue-button {
+  background: #4CAF50;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.play-again-button:hover,
+.continue-button:hover {
+  background: #45a049;
+  transform: translateY(-2px);
+}
+
+.continue-button {
+  background: #007bff;
+}
+
+.continue-button:hover {
+  background: #0056b3;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .package-sorting-modal {
+    width: 95%;
+    padding: 20px;
+  }
+  
+  .game-area {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .packages-container {
+    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+    gap: 8px;
+  }
+  
+  .package {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .required-numbers {
+    justify-content: center;
+  }
+  
+  .final-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+}

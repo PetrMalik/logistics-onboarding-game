@@ -3,6 +3,7 @@ import { Ground } from './Ground'
 import { Environment } from './Environment'
 import { CameraController } from './CameraController'
 import { InteractiveDepot } from './InteractiveDepot'
+import { InteractiveShop } from './InteractiveShop'
 import { DeliveryLocker } from './DeliveryLocker'
 import { QuestNavigator } from './QuestNavigator'
 import { useRef } from 'react'
@@ -14,13 +15,15 @@ import { useQuest } from '../contexts/QuestContext'
 interface SceneProps {
   onDepotInteraction: () => void
   onLockerInteraction: () => void
+  onShopInteraction: () => void
   onQuizInteraction: () => void
 }
 
-export default function Scene({ onDepotInteraction, onLockerInteraction, onQuizInteraction }: SceneProps) {
+export default function Scene({ onDepotInteraction, onLockerInteraction, onShopInteraction, onQuizInteraction }: SceneProps) {
   const carRef = useRef<THREE.Group>(null)
   const depotPosition = new THREE.Vector3(50, 0, 0) // Na silnici X=50
   const lockerPosition = new THREE.Vector3(-50, 0, 0) // Na druhé straně
+  const tabacoPosition = new THREE.Vector3(0, 0, 50) // Na třetí straně
   const { quests } = useQuest()
 
   // Interakce pro depot (package sorting)
@@ -37,15 +40,23 @@ export default function Scene({ onDepotInteraction, onLockerInteraction, onQuizI
     interactionDistance: 3
   })
 
+   const tabaco = useInteraction({
+    carRef,
+    targetPosition: tabacoPosition,
+    interactionDistance: 3
+  })
+
   // Kontrola vzdálenosti každý frame
   useFrame(() => {
     depot.checkDistance()
     locker.checkDistance()
+    tabaco.checkDistance()
   })
 
   // Zjistit, jestli jsou questy dokončené
   const quest1 = quests.find(q => q.id === 'quest-1')
   const quest2 = quests.find(q => q.id === 'quest-2')
+  const quest3 = quests.find(q => q.id === 'quest-3')
   const quest4 = quests.find(q => q.id === 'quest-4')
 
   // Když hráč interaguje s depotem
@@ -63,10 +74,17 @@ export default function Scene({ onDepotInteraction, onLockerInteraction, onQuizI
 
   // Když hráč interaguje s lockerem - jen pokud quest-2 není dokončený
   if (locker.canInteract) {
-    if (!quest2?.completed) {
+    if (!quest2?.completed && !quest2?.locked) {
       onLockerInteraction()
     }
     locker.resetInteraction()
+  }
+
+   if (tabaco.canInteract) {
+    if (!quest3?.completed && !quest3?.locked) {
+      onShopInteraction ()
+    }
+    tabaco.resetInteraction()
   }
 
   return (
@@ -104,6 +122,8 @@ export default function Scene({ onDepotInteraction, onLockerInteraction, onQuizI
       {/* Výdejní box (Courier Delivery) */}
       <DeliveryLocker position={[lockerPosition.x, lockerPosition.y, lockerPosition.z]} />
 
+      <InteractiveShop position={[tabacoPosition.x, tabacoPosition.y, tabacoPosition.z]} />
+
       {/* Podlaha a krajina */}
       <Ground />
 
@@ -125,6 +145,17 @@ export default function Scene({ onDepotInteraction, onLockerInteraction, onQuizI
       {/* Indikátor interakce u lockeru - jen když není dokončený */}
       {locker.isNearTarget && !quest2?.completed && (
         <mesh position={[lockerPosition.x, 4.5, lockerPosition.z]}>
+          <sphereGeometry args={[0.2, 16, 16]} />
+          <meshStandardMaterial 
+            color="#3498DB" 
+            emissive="#3498DB" 
+            emissiveIntensity={1}
+          />
+        </mesh>
+      )}
+
+       {tabaco.isNearTarget && !quest3?.completed && !quest3?.locked && (
+        <mesh position={[tabacoPosition.x, 4.5, tabacoPosition.z]}>
           <sphereGeometry args={[0.2, 16, 16]} />
           <meshStandardMaterial 
             color="#3498DB" 

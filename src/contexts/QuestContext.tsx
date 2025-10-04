@@ -41,9 +41,9 @@ const INITIAL_QUESTS: Quest[] = [
     completed: false,
     locked: true
   },
-  {
+ {
     id: 'quest-3',
-    title: 'Kompletní rozvozová trasa',
+    title: 'Doruč zásilku do obchodu',
     description: 'Dokonči celou rozvozovou trasu',
     completed: false,
     locked: true

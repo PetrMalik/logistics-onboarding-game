@@ -3,6 +3,7 @@ import { Canvas } from '@react-three/fiber'
 import Scene from './components/Scene'
 import { PackageSortingGame } from './components/PackageSortingGame'
 import { CourierDeliveryGame } from './components/CourierDeliveryGame'
+import { PackageDeliveryGame } from './components/PackageDeliveryGame'
 import { QuizGame } from './components/QuizGame'
 import { ScoreDisplay } from './components/ScoreDisplay'
 import { QuestList } from './components/QuestList'
@@ -12,7 +13,7 @@ import { ScoreProvider } from './contexts/ScoreContext'
 import { QuestProvider, useQuest } from './contexts/QuestContext'
 import './App.css'
 
-type ActiveGame = 'none' | 'package-sorting' | 'courier-delivery' | 'quiz'
+type ActiveGame = 'none' | 'package-sorting' | 'courier-delivery' | 'package-delivery' | 'quiz'
 
 function AppContent() {
   const [activeGame, setActiveGame] = useState<ActiveGame>('none')
@@ -27,6 +28,10 @@ function AppContent() {
 
   const handleLockerInteraction = () => {
     setActiveGame('courier-delivery')
+  }
+
+  const handleShopInteraction = () => {
+    setActiveGame('package-delivery')
   }
 
   const handleQuizInteraction = () => {
@@ -47,6 +52,7 @@ function AppContent() {
         <Scene 
           onDepotInteraction={handleDepotInteraction}
           onLockerInteraction={handleLockerInteraction}
+          onShopInteraction={handleShopInteraction}
           onQuizInteraction={handleQuizInteraction}
         />
       </Canvas>
@@ -91,6 +97,11 @@ function AppContent() {
       {/* Courier Delivery Mini Game */}
       {activeGame === 'courier-delivery' && (
         <CourierDeliveryGame onClose={handleCloseGame} />
+      )}
+
+      {/* Package Delivery Mini Game */}
+      {activeGame === 'package-delivery' && (
+        <PackageDeliveryGame onClose={handleCloseGame} />
       )}
 
       {/* Quiz Game */}
