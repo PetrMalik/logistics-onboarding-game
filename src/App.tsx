@@ -7,7 +7,7 @@ function App() {
     <div style={{ width: '100vw', height: '100vh', margin: 0, padding: 0 }}>
       <Canvas
         shadows
-        camera={{ position: [0, 5, 10], fov: 60 }}
+        camera={{ position: [8, 10, 8], fov: 50 }}
         style={{ background: '#FFB88C' }}
       >
         <Scene />
