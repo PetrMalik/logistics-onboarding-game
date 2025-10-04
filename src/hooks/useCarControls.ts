@@ -6,10 +6,16 @@ export function useCarControls() {
     backward: false,
     left: false,
     right: false,
+    turbo: false,
   })
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Shift') {
+        setKeys((k) => ({ ...k, turbo: true }))
+        return
+      }
+      
       switch (e.key.toLowerCase()) {
         case 'w':
           setKeys((k) => ({ ...k, forward: true }))
@@ -27,6 +33,11 @@ export function useCarControls() {
     }
 
     const handleKeyUp = (e: KeyboardEvent) => {
+      if (e.key === 'Shift') {
+        setKeys((k) => ({ ...k, turbo: false }))
+        return
+      }
+      
       switch (e.key.toLowerCase()) {
         case 'w':
           setKeys((k) => ({ ...k, forward: false }))

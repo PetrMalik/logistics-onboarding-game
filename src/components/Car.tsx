@@ -8,7 +8,7 @@ export const Car = forwardRef<THREE.Group>((props, ref) => {
   const internalRef = useRef<THREE.Group>(null)
   const carRef = (ref as React.MutableRefObject<THREE.Group>) || internalRef
   
-  const { forward, backward, left, right } = useCarControls()
+  const { forward, backward, left, right, turbo } = useCarControls()
   
   const velocity = useRef(0)
   const rotation = useRef(0)
@@ -17,9 +17,11 @@ export const Car = forwardRef<THREE.Group>((props, ref) => {
     if (!carRef.current) return
 
     // Parametry realistického jízdního modelu
-    const maxSpeed = 7.5 // Zvýšeno o 50% (z 5 na 7.5)
+    const baseMaxSpeed = 7.5 // Zvýšeno o 50% (z 5 na 7.5)
+    const turboMultiplier = 1.8 // Turbo zvyšuje rychlost o 80%
+    const maxSpeed = turbo ? baseMaxSpeed * turboMultiplier : baseMaxSpeed
     const maxReverseSpeed = 4 // Couvání je pomalejší
-    const acceleration = 8 // Zrychlení při sešlápnutí plynu
+    const acceleration = turbo ? 12 : 8 // Turbo zvyšuje zrychlení
     const braking = 12 // Aktivní brzdění (S klávesa)
     const friction = 3 // Pasivní zpomalení (třecí odpor)
     const rotationSpeed = 2.5
