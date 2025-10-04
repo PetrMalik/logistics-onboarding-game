@@ -6,6 +6,8 @@ import './PackageSortingGame.css'
 interface Package {
   id: number
   route: string
+  trackingNumber: string
+  isValid: boolean // Značí, zda je číslo zásilky validní
 }
 
 interface DraggedPackage extends Package {
@@ -21,7 +23,42 @@ const TOTAL_PACKAGES = 12
 const REQUIRED_PACKAGES = 4
 const POINTS_PER_CORRECT_PACKAGE = 25 // Body za každý správný balík
 
+// Helper funkce pro generování čísla zásilky
+const generateTrackingNumber = (valid: boolean): string => {
+  if (valid) {
+    // Vygeneruj 14místné číslo
+    return Array.from({ length: 14 }, () => Math.floor(Math.random() * 10)).join('')
+  } else {
+    // Vygeneruj 6místné číslo (nevalidní)
+    return Array.from({ length: 6 }, () => Math.floor(Math.random() * 10)).join('')
+  }
+}
+
 type GameStep = 'storytelling' | 'game' | 'result'
+
+// Komponenta pro čárový kód
+function Barcode({ trackingNumber }: { trackingNumber: string }) {
+  // Vygenerujeme vizuální reprezentaci čárového kódu
+  const bars = trackingNumber.split('').map((digit) => {
+    // Každá číslice má jiný pattern čar (simulace skutečného čárového kódu)
+    const patterns = ['11', '101', '110', '1001', '1010', '1100', '10001', '10010', '10100', '11000']
+    return patterns[parseInt(digit)]
+  }).join('0') // mezery mezi čísly
+  
+  return (
+    <div className="barcode-container">
+      <div className="barcode">
+        {bars.split('').map((bar, i) => (
+          <div
+            key={i}
+            className={bar === '1' ? 'bar-black' : 'bar-white'}
+          />
+        ))}
+      </div>
+      <div className="tracking-number">{trackingNumber}</div>
+    </div>
+  )
+}
 
 export function PackageSortingGame({ onClose }: PackageSortingGameProps) {
   const [currentStep, setCurrentStep] = useState<GameStep>('storytelling')
@@ -41,26 +78,35 @@ export function PackageSortingGame({ onClose }: PackageSortingGameProps) {
     const randomRoute = ROUTES[Math.floor(Math.random() * ROUTES.length)]
     setAssignedRoute(randomRoute)
 
-    // Vytvoření 12 balíků s náhodnými trasami
-    // Zajistíme, že alespoň 4 balíky budou se správnou trasou
     const newPackages: Package[] = []
     
-    // Přidáme 4-6 balíků se správnou trasou
-    const correctPackagesCount = 4 + Math.floor(Math.random() * 3)
-    for (let i = 0; i < correctPackagesCount; i++) {
+    // Přidáme 3 validní balíky se správnou trasou a správným 14místným číslem
+    for (let i = 0; i < 3; i++) {
       newPackages.push({
         id: i,
-        route: randomRoute
+        route: randomRoute,
+        trackingNumber: generateTrackingNumber(true),
+        isValid: true
       })
     }
 
-    // Zbylé balíky budou mít jiné trasy
-    for (let i = correctPackagesCount; i < TOTAL_PACKAGES; i++) {
+    // Přidáme 1 nevalidní balík se správnou trasou, ale špatným formátem čísla (6místné)
+    newPackages.push({
+      id: 3,
+      route: randomRoute,
+      trackingNumber: generateTrackingNumber(false),
+      isValid: false
+    })
+
+    // Zbylé balíky budou mít jiné trasy (všechny s validním číslem)
+    for (let i = 4; i < TOTAL_PACKAGES; i++) {
       const otherRoutes = ROUTES.filter(r => r !== randomRoute)
       const randomOtherRoute = otherRoutes[Math.floor(Math.random() * otherRoutes.length)]
       newPackages.push({
         id: i,
-        route: randomOtherRoute
+        route: randomOtherRoute,
+        trackingNumber: generateTrackingNumber(true),
+        isValid: true
       })
     }
 
@@ -106,7 +152,8 @@ export function PackageSortingGame({ onClose }: PackageSortingGameProps) {
   }
 
   const handleCheckResult = () => {
-    const correct = selectedPackages.filter(p => p.route === assignedRoute).length
+    // Spočítáme správné balíky (správná trasa A zároveň validní číslo zásilky)
+    const correct = selectedPackages.filter(p => p.route === assignedRoute && p.isValid).length
     setCorrectCount(correct)
     
     // Výpočet bodů
@@ -136,20 +183,34 @@ export function PackageSortingGame({ onClose }: PackageSortingGameProps) {
     setAssignedRoute(randomRoute)
 
     const newPackages: Package[] = []
-    const correctPackagesCount = 4 + Math.floor(Math.random() * 3)
-    for (let i = 0; i < correctPackagesCount; i++) {
+    
+    // Přidáme 3 validní balíky se správnou trasou
+    for (let i = 0; i < 3; i++) {
       newPackages.push({
         id: Date.now() + i,
-        route: randomRoute
+        route: randomRoute,
+        trackingNumber: generateTrackingNumber(true),
+        isValid: true
       })
     }
 
-    for (let i = correctPackagesCount; i < TOTAL_PACKAGES; i++) {
+    // Přidáme 1 nevalidní balík se správnou trasou
+    newPackages.push({
+      id: Date.now() + 3,
+      route: randomRoute,
+      trackingNumber: generateTrackingNumber(false),
+      isValid: false
+    })
+
+    // Zbylé balíky s jinými trasami
+    for (let i = 4; i < TOTAL_PACKAGES; i++) {
       const otherRoutes = ROUTES.filter(r => r !== randomRoute)
       const randomOtherRoute = otherRoutes[Math.floor(Math.random() * otherRoutes.length)]
       newPackages.push({
         id: Date.now() + i,
-        route: randomOtherRoute
+        route: randomOtherRoute,
+        trackingNumber: generateTrackingNumber(true),
+        isValid: true
       })
     }
 
@@ -162,9 +223,9 @@ export function PackageSortingGame({ onClose }: PackageSortingGameProps) {
       <div className="game-container">
         <div className="game-header">
           <h2>
-            {currentStep === 'storytelling' && 'Ranní brífink'}
-            {currentStep === 'game' && 'Nakládka balíků na depo'}
-            {currentStep === 'result' && 'Výsledek'}
+            {currentStep === 'storytelling' && 'Depo'}
+            {currentStep === 'game' && 'Nakládka balíků'}
+            {currentStep === 'result' && 'Vyhodnocení'}
           </h2>
           <button className="close-button" onClick={onClose}>✕</button>
         </div>
@@ -173,41 +234,22 @@ export function PackageSortingGame({ onClose }: PackageSortingGameProps) {
         {currentStep === 'storytelling' && (
           <div className="storytelling-section">
             <div className="story-icon">🏢</div>
-            <h3>Vítej na depu!</h3>
+            <h3>DEPO</h3>
             
             <div className="story-content">
               <p>
-                Je 6:00 ráno a právě jsi dorazil na logistické centrum. 
-                Tvůj vedoucí tě zdraví a přiděluje ti dnešní trasu.
+                Depo funguje jako organizovaný uzel – tady se z chaosu stovek balíků 
+                stává plánovaná cesta k příjemcům.
               </p>
               
-              <div className="story-highlight">
-                <div className="story-route-badge">
-                  <strong>Tvá dnešní trasa:</strong>
-                  <span className="route-label-big">{assignedRoute}</span>
-                </div>
-              </div>
-              
               <p>
-                <strong>Tvůj úkol:</strong> Na depu leží zásilky pro různé trasy. 
-                Musíš správně vybrat a naložit do své dodávky <strong>pouze balíky 
-                označené pro trasu {assignedRoute}</strong>.
-              </p>
-              
-              <div className="story-tip">
-                <strong>💡 Tip:</strong> Každý balík má na sobě štítek s označením trasy. 
-                Pozorně je kontroluj, abys nepřevzal cizí zásilky!
-              </div>
-              
-              <p>
-                Správně naložené balíky zajistí spokojené zákazníky a efektivní 
-                rozvoz. Jsi připraven?
+                Kurýři zde ráno naloží zásilky do aut a balíky se roztřídí podle tras.
               </p>
             </div>
 
             <div className="story-buttons">
               <button className="start-button" onClick={handleStartGame}>
-                ✓ Rozumím, začít úkol
+                ✓ Rozumím, pokračovat
               </button>
               {hasPlayedBefore && (
                 <button className="skip-button" onClick={handleSkipStory}>
@@ -223,11 +265,11 @@ export function PackageSortingGame({ onClose }: PackageSortingGameProps) {
           <>
             <div className="game-info">
               <div className="route-badge">
-                <strong>Vaše trasa:</strong>
+                <strong>Dnes rozvážíš trasu:</strong>
                 <span className="route-label">{assignedRoute}</span>
               </div>
               <div className="instruction">
-                Vyberte 4 balíky pro vaši trasu a přetáhněte je do dodávky
+                Z hromady balíků vyber ty správné a nalož je do dodávky.
               </div>
             </div>
 
@@ -247,8 +289,9 @@ export function PackageSortingGame({ onClose }: PackageSortingGameProps) {
                       draggable
                       onDragStart={() => handleDragStart(pkg, false)}
                     >
+                      <div className="package-route-badge">Trasa {pkg.route}</div>
                       <div className="package-box">📦</div>
-                      <div className="package-route">Trasa {pkg.route}</div>
+                      <Barcode trackingNumber={pkg.trackingNumber} />
                     </div>
                   ))}
                 </div>
@@ -274,8 +317,9 @@ export function PackageSortingGame({ onClose }: PackageSortingGameProps) {
                       draggable
                       onDragStart={() => handleDragStart(pkg, true)}
                     >
+                      <div className="package-route-badge">Trasa {pkg.route}</div>
                       <div className="package-box">📦</div>
-                      <div className="package-route">Trasa {pkg.route}</div>
+                      <Barcode trackingNumber={pkg.trackingNumber} />
                     </div>
                   ))}
                 </div>
@@ -299,7 +343,7 @@ export function PackageSortingGame({ onClose }: PackageSortingGameProps) {
             <div className="result-content">
               <h2>Vyhodnocení úkolu</h2>
               <div className="result-score">
-                <div className="score-big">{correctCount} / {REQUIRED_PACKAGES}</div>
+                <div className="score-big">{correctCount} / 3</div>
                 <div className="score-text">správně vybraných balíků</div>
               </div>
               
@@ -309,25 +353,55 @@ export function PackageSortingGame({ onClose }: PackageSortingGameProps) {
                 <div className="points-label">bodů</div>
               </div>
               
-              {correctCount === REQUIRED_PACKAGES ? (
-                <div className="result-message success">
-                  🎉 Výborně! Všechny balíky jsou správné!
-                  <br />
-                  <small>Jsi připraven vyrazit na trasu.</small>
-                </div>
-              ) : correctCount >= 2 ? (
-                <div className="result-message partial">
-                  👍 Dobrý pokus! Ještě to chce zapracovat.
-                  <br />
-                  <small>Některé balíky patří na jinou trasu.</small>
-                </div>
-              ) : (
-                <div className="result-message fail">
-                  💪 Zkus to znovu, tentokrát to určitě půjde!
-                  <br />
-                  <small>Zkontroluj pozorně štítky na balících.</small>
-                </div>
-              )}
+              {(() => {
+                // Detekce nevalidní zásilky ve výběru
+                const hasInvalidPackage = selectedPackages.some(p => !p.isValid)
+                const wrongRouteCount = selectedPackages.filter(p => p.route !== assignedRoute).length
+                
+                if (correctCount === 3 && !hasInvalidPackage) {
+                  return (
+                    <div className="result-message success">
+                      🎉 Výborně! Všechny balíky jsou správné!
+                      <br />
+                      <small>Jsi připraven vyrazit na trasu.</small>
+                    </div>
+                  )
+                } else {
+                  return (
+                    <div className="result-message partial">
+                      <div className="result-title">⚠️ Pozor!</div>
+                      <div className="result-explanation">
+                        <p><strong>Zásilka se nemůže dát k rozvozu pokud:</strong></p>
+                        <ul className="result-list">
+                          <li>Je poškozená zásilka</li>
+                          <li>Je poškozený štítek</li>
+                          <li>Je nevalidní číslo zásilky</li>
+                        </ul>
+                        {hasInvalidPackage && (
+                          <>
+                            <p className="result-highlight">
+                              ❌ Vybral jsi zásilku s <strong>nevalidním číslem zásilky</strong>. 
+                              Správné číslo zásilky musí mít 14 číslic.
+                            </p>
+                            <p className="result-info">
+                              <strong>💡 Důležité:</strong> Parcel number je jedinečný identifikátor zásilky, 
+                              který nese veškeré informace o zásilce. Bez tohoto čísla (ve správném formátu) 
+                              nelze zásilku dát do rozvozu.
+                            </p>
+                          </>
+                        )}
+                        {wrongRouteCount > 0 && (
+                          <p className="result-highlight">
+                            ❌ Vybral jsi {wrongRouteCount} {wrongRouteCount === 1 ? 'balík' : 'balíky'} 
+                            {' '}pro <strong>jinou trasu</strong>.
+                          </p>
+                        )}
+                        <p>Zkontroluj pozorně štítky a čísla zásilek!</p>
+                      </div>
+                    </div>
+                  )
+                }
+              })()}
 
               <div className="result-buttons">
                 <button className="play-again-button" onClick={handlePlayAgain}>
