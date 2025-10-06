@@ -147,3 +147,5 @@ export function Pedestrian({ route, speed = 1.5, color = '#4A90E2' }: Pedestrian
   )
 }
 
+
+

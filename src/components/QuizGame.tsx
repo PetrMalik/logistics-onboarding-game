@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useScore } from '../contexts/ScoreContext'
+import { useScore } from '../hooks/useScore'
 import { useQuest } from '../contexts/QuestContext'
 import './QuizGame.css'
 
@@ -52,7 +52,6 @@ export function QuizGame({ onClose }: QuizGameProps) {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [selectedAnswers, setSelectedAnswers] = useState<number[]>([])
   const [timeRemaining, setTimeRemaining] = useState(TIME_LIMIT)
-  const [quizStartTime, setQuizStartTime] = useState<number | null>(null)
   const [correctCount, setCorrectCount] = useState(0)
   const [earnedPoints, setEarnedPoints] = useState(0)
   const { addScore } = useScore()
@@ -79,7 +78,6 @@ export function QuizGame({ onClose }: QuizGameProps) {
   // Start kvízu
   const handleStartQuiz = () => {
     setCurrentStep('quiz')
-    setQuizStartTime(Date.now())
   }
 
   // Výběr odpovědi

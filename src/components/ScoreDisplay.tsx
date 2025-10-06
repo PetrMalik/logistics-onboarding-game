@@ -1,4 +1,4 @@
-import { useScore } from '../contexts/ScoreContext'
+import { useScore } from '../hooks/useScore'
 import './ScoreDisplay.css'
 
 export function ScoreDisplay() {
