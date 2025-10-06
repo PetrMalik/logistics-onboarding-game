@@ -8,6 +8,10 @@ import { DeliveryLocker } from './DeliveryLocker'
 import { Pub } from './Pub'
 import { QuestNavigator } from './QuestNavigator'
 import { PackageCollector } from './PackageCollector'
+import { Pedestrians } from './Pedestrians'
+import { Airplane } from './Airplane'
+import { NPCCars } from './NPCCars'
+import { TrafficLights } from './TrafficLights'
 import { useRef } from 'react'
 import * as THREE from 'three'
 import { useFrame } from '@react-three/fiber'
@@ -106,23 +110,41 @@ export default function Scene({ onDepotInteraction, onLockerInteraction, onShopI
 
   return (
     <>
-      {/* Osvětlení - upravené pro větší plochu */}
-      <ambientLight intensity={0.6} />
+      {/* Realistické osvětlení */}
+      {/* Slunce - hlavní zdroj světla */}
       <directionalLight
-        position={[20, 40, 20]}
-        intensity={1}
+        position={[50, 60, 30]}
+        intensity={1.8}
         castShadow
-        shadow-mapSize={[4096, 4096]}
-        shadow-camera-left={-120}
-        shadow-camera-right={120}
-        shadow-camera-top={120}
-        shadow-camera-bottom={-120}
+        shadow-mapSize={[1024, 1024]}
+        shadow-camera-left={-100}
+        shadow-camera-right={100}
+        shadow-camera-top={100}
+        shadow-camera-bottom={-100}
+        shadow-camera-near={0.5}
+        shadow-camera-far={150}
+        shadow-bias={-0.0001}
       />
+      
+      {/* Nízké ambientní světlo pro realistický kontrast */}
+      <ambientLight intensity={0.3} />
+      
+      {/* Hemisférické světlo pro přirozený nádech oblohy a země */}
       <hemisphereLight
-        color="#FFD4A3"
-        groundColor="#FF9B6B"
-        intensity={0.5}
+        color="#87CEEB"      // Barva oblohy - světle modrá
+        groundColor="#8B7355" // Barva země - hnědá
+        intensity={0.4}
       />
+      
+      {/* Doplňkové světlo zezadu pro lepší hloubku */}
+      <directionalLight
+        position={[-30, 20, -30]}
+        intensity={0.3}
+        color="#FFA07A"
+      />
+      
+      {/* Mlha pro atmosférický efekt */}
+      <fog attach="fog" args={['#FFB88C', 50, 180]} />
 
       {/* Kamera sledující auto */}
       <CameraController carRef={carRef} />
@@ -152,6 +174,18 @@ export default function Scene({ onDepotInteraction, onLockerInteraction, onShopI
 
       {/* Prostředí - stromy, budovy, dekorace */}
       <Environment />
+
+      {/* Letadlo létající nad mraky */}
+      <Airplane />
+
+      {/* Chodci procházející po mapě */}
+      <Pedestrians />
+
+      {/* NPC auta jezdící po silnicích */}
+      <NPCCars />
+
+      {/* Semafory na křižovatkách */}
+      <TrafficLights />
 
       {/* Indikátor interakce u depotu - quest-1 nebo quest-4 */}
       {depot.isNearTarget && (!quest1?.completed || (!quest4?.completed && !quest4?.locked)) && (

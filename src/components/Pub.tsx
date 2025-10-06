@@ -13,35 +13,63 @@ export function Pub({ position }: PubProps) {
       {/* Základna hospody - kreslený styl */}
       <mesh castShadow position={[0, 1.8, 0]}>
         <boxGeometry args={[6, 3.6, 4]} />
-        <meshStandardMaterial color="#8B4513" />
+        <meshStandardMaterial 
+          color="#8B4513" 
+          roughness={0.85}
+          metalness={0}
+        />
       </mesh>
 
       {/* Střecha */}
       <mesh castShadow position={[0, 3.8, 0]}>
         <coneGeometry args={[4, 1.6, 4]} />
-        <meshStandardMaterial color="#654321" />
+        <meshStandardMaterial 
+          color="#654321" 
+          roughness={0.8}
+          metalness={0}
+        />
       </mesh>
 
       {/* Cedulka "HOSPODA" */}
-      <mesh position={[0, 2.5, 2.01]}>
+      <mesh castShadow position={[0, 2.5, 2.01]}>
         <boxGeometry args={[2.5, 0.6, 0.1]} />
-        <meshStandardMaterial color="#654321" />
+        <meshStandardMaterial 
+          color="#654321" 
+          roughness={0.7}
+          metalness={0}
+        />
       </mesh>
 
       {/* Dveře */}
-      <mesh position={[0, 0.8, 2.01]}>
+      <mesh castShadow position={[0, 0.8, 2.01]}>
         <boxGeometry args={[1, 1.6, 0.1]} />
-        <meshStandardMaterial color="#5D4E37" />
+        <meshStandardMaterial 
+          color="#5D4E37" 
+          roughness={0.9}
+          metalness={0}
+        />
       </mesh>
 
       {/* Okna */}
       <mesh position={[-1.5, 1.5, 2.01]}>
         <boxGeometry args={[0.8, 0.8, 0.05]} />
-        <meshStandardMaterial color="#87CEEB" />
+        <meshStandardMaterial 
+          color="#87CEEB" 
+          roughness={0.1}
+          metalness={0.3}
+          emissive="#87CEEB"
+          emissiveIntensity={0.15}
+        />
       </mesh>
       <mesh position={[1.5, 1.5, 2.01]}>
         <boxGeometry args={[0.8, 0.8, 0.05]} />
-        <meshStandardMaterial color="#87CEEB" />
+        <meshStandardMaterial 
+          color="#87CEEB" 
+          roughness={0.1}
+          metalness={0.3}
+          emissive="#87CEEB"
+          emissiveIntensity={0.15}
+        />
       </mesh>
 
       {/* Pivní sklenice na cedulce - dekorativní */}

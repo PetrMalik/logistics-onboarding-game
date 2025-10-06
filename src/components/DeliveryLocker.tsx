@@ -13,7 +13,11 @@ export function DeliveryLocker({ position }: DeliveryLockerProps) {
       {/* Hlavní tělo výdejního boxu */}
       <mesh castShadow position={[0, 1.5, 0]}>
         <boxGeometry args={[3, 3, 1]} />
-        <meshStandardMaterial color="#2C3E50" />
+        <meshStandardMaterial 
+          color="#2C3E50" 
+          roughness={0.3}
+          metalness={0.6}
+        />
       </mesh>
 
       {/* Displej/obrazovka nahoře */}
@@ -23,6 +27,8 @@ export function DeliveryLocker({ position }: DeliveryLockerProps) {
           color="#1a1a1a" 
           emissive="#00ff00" 
           emissiveIntensity={0.2}
+          roughness={0.2}
+          metalness={0.8}
         />
       </mesh>
 
@@ -38,7 +44,11 @@ export function DeliveryLocker({ position }: DeliveryLockerProps) {
             {/* Dvířka schránky */}
             <mesh position={[x, y, 0.51]}>
               <boxGeometry args={[0.75, 0.75, 0.05]} />
-              <meshStandardMaterial color="#34495E" />
+              <meshStandardMaterial 
+                color="#34495E" 
+                roughness={0.4}
+                metalness={0.5}
+              />
             </mesh>
             {/* Číslo schránky */}
             <mesh position={[x, y, 0.54]}>
@@ -47,6 +57,8 @@ export function DeliveryLocker({ position }: DeliveryLockerProps) {
                 color="#ECF0F1" 
                 emissive="#3498DB"
                 emissiveIntensity={0.3}
+                roughness={0.2}
+                metalness={0.7}
               />
             </mesh>
           </group>
@@ -56,7 +68,11 @@ export function DeliveryLocker({ position }: DeliveryLockerProps) {
       {/* Podstavec */}
       <mesh castShadow position={[0, 0.15, 0]}>
         <boxGeometry args={[3.2, 0.3, 1.2]} />
-        <meshStandardMaterial color="#1C2833" />
+        <meshStandardMaterial 
+          color="#1C2833" 
+          roughness={0.5}
+          metalness={0.4}
+        />
       </mesh>
 
       {/* Značka interakce (kroužek nad boxem) */}

@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { Canvas } from '@react-three/fiber'
+import * as THREE from 'three'
 import Scene from './components/Scene'
 import { PackageSortingGame } from './components/PackageSortingGame'
 import { CourierDeliveryGame } from './components/CourierDeliveryGame'
@@ -136,9 +137,15 @@ function AppContent() {
   return (
     <div style={{ width: '100vw', height: '100vh', margin: 0, padding: 0 }}>
       <Canvas
-        shadows
+        shadows={{ enabled: true, type: THREE.PCFSoftShadowMap }}
         camera={{ position: [8, 10, 8], fov: 50 }}
-        style={{ background: '#FFB88C' }}
+        style={{ background: '#87CEEB' }}
+        gl={{
+          antialias: true,
+          toneMapping: THREE.ACESFilmicToneMapping,
+          toneMappingExposure: 1.2,
+          outputColorSpace: THREE.SRGBColorSpace
+        }}
       >
         <Scene 
           onDepotInteraction={handleDepotInteraction}
