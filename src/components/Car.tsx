@@ -4,14 +4,13 @@ import { useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
 import { useCarControls } from '../hooks/useCarControls'
 import { getValidPosition } from '../utils/roadSystem'
-import dpdVanModel from '../assets/models/dpd-van-red.glb'
 
 export const Car = forwardRef<THREE.Group, { onResetTrigger?: number }>((props, ref) => {
   const internalRef = useRef<THREE.Group>(null)
   const carRef = (ref as React.MutableRefObject<THREE.Group>) || internalRef
   
   // Načtení 3D modelu dodávky
-  const { scene } = useGLTF(dpdVanModel)
+  const { scene } = useGLTF('/models/dpd-van-red.glb')
   
   const { forward, backward, left, right, turbo } = useCarControls()
   
@@ -251,5 +250,5 @@ export const Car = forwardRef<THREE.Group, { onResetTrigger?: number }>((props, 
 Car.displayName = 'Car'
 
 // Preload 3D modelu pro lepší výkon
-useGLTF.preload(dpdVanModel)
+useGLTF.preload('/models/dpd-van-red.glb')
 
