@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useQuest } from '../contexts/QuestContext'
-import { useScore } from '../contexts/ScoreContext'
+import { useScore } from '../hooks/useScore'
 import './DebugPanel.css'
 
 export function DebugPanel() {

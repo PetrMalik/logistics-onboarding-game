@@ -3,7 +3,7 @@ import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import { CollectablePackage } from './CollectablePackage'
 import { FloatingScore } from './FloatingScore'
-import { useScore } from '../contexts/ScoreContext'
+import { useScore } from '../hooks/useScore'
 import { roads } from '../utils/roadSystem'
 
 interface PackageCollectorProps {

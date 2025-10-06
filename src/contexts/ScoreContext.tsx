@@ -1,24 +1,7 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
+import { useState, useEffect, type ReactNode } from 'react'
+import { ScoreContext, type ScoreData } from './ScoreContextDefinition'
 
 const SCORE_STORAGE_KEY = 'logistics-game-score'
-
-export interface ScoreData {
-  totalScore: number
-  miniGamesCompleted: number
-  lastUpdated: number
-}
-
-interface ScoreContextType {
-  score: number
-  miniGamesCompleted: number
-  lastUpdated: number
-  scoreData: ScoreData
-  addScore: (points: number, miniGameCompleted?: boolean) => void
-  resetScore: () => void
-  setScore: (score: number) => void
-}
-
-const ScoreContext = createContext<ScoreContextType | undefined>(undefined)
 
 interface ScoreProviderProps {
   children: ReactNode
@@ -93,15 +76,4 @@ export function ScoreProvider({ children }: ScoreProviderProps) {
   return <ScoreContext.Provider value={value}>{children}</ScoreContext.Provider>
 }
 
-/**
- * Hook pro použití score systému v komponentách
- * Musí být použit uvnitř ScoreProvider
- */
-export function useScore() {
-  const context = useContext(ScoreContext)
-  if (context === undefined) {
-    throw new Error('useScore must be used within a ScoreProvider')
-  }
-  return context
-}
 

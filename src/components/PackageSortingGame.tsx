@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useScore } from '../contexts/ScoreContext'
+import { useScore } from '../hooks/useScore'
 import { useQuest } from '../contexts/QuestContext'
 import './PackageSortingGame.css'
 

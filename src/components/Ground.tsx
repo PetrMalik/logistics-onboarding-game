@@ -4,93 +4,105 @@ export function Ground() {
       {/* Hlavní podlaha - rozšířená na 200x200 */}
       <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
         <planeGeometry args={[200, 200]} />
-        <meshStandardMaterial color="#7FB069" />
+        <meshStandardMaterial 
+          color="#7FB069" 
+          roughness={0.9}
+          metalness={0}
+        />
       </mesh>
 
       {/* Síť silnic mezi budovami */}
       {/* Hlavní horizontální silnice */}
       <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, 0]}>
         <planeGeometry args={[200, 6]} />
-        <meshStandardMaterial color="#4A4A4A" />
+        <meshStandardMaterial 
+          color="#4A4A4A" 
+          roughness={0.7}
+          metalness={0}
+        />
       </mesh>
       
       {/* Hlavní vertikální silnice */}
       <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, 0]}>
         <planeGeometry args={[6, 200]} />
-        <meshStandardMaterial color="#4A4A4A" />
+        <meshStandardMaterial 
+          color="#4A4A4A" 
+          roughness={0.7}
+          metalness={0}
+        />
       </mesh>
 
       {/* Horizontální silnice na Y=25 */}
       <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, 25]}>
         <planeGeometry args={[160, 6]} />
-        <meshStandardMaterial color="#4A4A4A" />
+        <meshStandardMaterial color="#4A4A4A" roughness={0.7} metalness={0} />
       </mesh>
 
       {/* Horizontální silnice na Y=-25 */}
       <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, -25]}>
         <planeGeometry args={[160, 6]} />
-        <meshStandardMaterial color="#4A4A4A" />
+        <meshStandardMaterial color="#4A4A4A" roughness={0.7} metalness={0} />
       </mesh>
 
       {/* Horizontální silnice na Y=50 */}
       <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, 50]}>
         <planeGeometry args={[120, 6]} />
-        <meshStandardMaterial color="#4A4A4A" />
+        <meshStandardMaterial color="#4A4A4A" roughness={0.7} metalness={0} />
       </mesh>
 
       {/* Horizontální silnice na Y=-50 */}
       <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, -50]}>
         <planeGeometry args={[120, 6]} />
-        <meshStandardMaterial color="#4A4A4A" />
+        <meshStandardMaterial color="#4A4A4A" roughness={0.7} metalness={0} />
       </mesh>
 
       {/* Vertikální silnice na X=25 */}
       <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[25, 0.01, 0]}>
         <planeGeometry args={[6, 160]} />
-        <meshStandardMaterial color="#4A4A4A" />
+        <meshStandardMaterial color="#4A4A4A" roughness={0.7} metalness={0} />
       </mesh>
 
       {/* Vertikální silnice na X=-25 */}
       <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[-25, 0.01, 0]}>
         <planeGeometry args={[6, 160]} />
-        <meshStandardMaterial color="#4A4A4A" />
+        <meshStandardMaterial color="#4A4A4A" roughness={0.7} metalness={0} />
       </mesh>
 
       {/* Vertikální silnice na X=50 */}
       <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[50, 0.01, 0]}>
         <planeGeometry args={[6, 120]} />
-        <meshStandardMaterial color="#4A4A4A" />
+        <meshStandardMaterial color="#4A4A4A" roughness={0.7} metalness={0} />
       </mesh>
 
       {/* Vertikální silnice na X=-50 */}
       <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[-50, 0.01, 0]}>
         <planeGeometry args={[6, 120]} />
-        <meshStandardMaterial color="#4A4A4A" />
+        <meshStandardMaterial color="#4A4A4A" roughness={0.7} metalness={0} />
       </mesh>
 
       {/* Silnice pro vzdálené budovy */}
       {/* Horizontální silnice na Y=75 */}
       <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, 75]}>
         <planeGeometry args={[80, 6]} />
-        <meshStandardMaterial color="#4A4A4A" />
+        <meshStandardMaterial color="#4A4A4A" roughness={0.7} metalness={0} />
       </mesh>
 
       {/* Horizontální silnice na Y=-75 */}
       <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, -75]}>
         <planeGeometry args={[80, 6]} />
-        <meshStandardMaterial color="#4A4A4A" />
+        <meshStandardMaterial color="#4A4A4A" roughness={0.7} metalness={0} />
       </mesh>
 
       {/* Vertikální silnice na X=75 */}
       <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[75, 0.01, 0]}>
         <planeGeometry args={[6, 80]} />
-        <meshStandardMaterial color="#4A4A4A" />
+        <meshStandardMaterial color="#4A4A4A" roughness={0.7} metalness={0} />
       </mesh>
 
       {/* Vertikální silnice na X=-75 */}
       <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[-75, 0.01, 0]}>
         <planeGeometry args={[6, 80]} />
-        <meshStandardMaterial color="#4A4A4A" />
+        <meshStandardMaterial color="#4A4A4A" roughness={0.7} metalness={0} />
       </mesh>
 
       {/* Bílé čáry na silnicích - středové čáry pro všechny silnice */}

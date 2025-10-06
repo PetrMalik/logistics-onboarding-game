@@ -13,19 +13,31 @@ export function InteractiveDepot({ position }: InteractiveDepotProps) {
       {/* Základna budovy */}
       <mesh castShadow position={[0, 1, 0]}>
         <boxGeometry args={[4, 2, 4]} />
-        <meshStandardMaterial color="#8B7355" />
+        <meshStandardMaterial 
+          color="#8B7355" 
+          roughness={0.8}
+          metalness={0}
+        />
       </mesh>
 
       {/* Střecha */}
       <mesh castShadow position={[0, 2.5, 0]}>
         <coneGeometry args={[3, 1.5, 4]} />
-        <meshStandardMaterial color="#6B5345" />
+        <meshStandardMaterial 
+          color="#6B5345" 
+          roughness={0.75}
+          metalness={0}
+        />
       </mesh>
 
       {/* Dveře */}
-      <mesh position={[0, 0.6, 2.01]}>
+      <mesh castShadow position={[0, 0.6, 2.01]}>
         <boxGeometry args={[0.8, 1.2, 0.1]} />
-        <meshStandardMaterial color="#5D4E37" />
+        <meshStandardMaterial 
+          color="#5D4E37" 
+          roughness={0.9}
+          metalness={0}
+        />
       </mesh>
 
       {/* Značka interakce (kroužek nad budovou) */}

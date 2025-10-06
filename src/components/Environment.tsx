@@ -6,26 +6,42 @@ function Tree({ position }: { position: [number, number, number] }) {
     <group position={position}>
       {/* Kmen */}
       <mesh castShadow position={[0, 1, 0]}>
-        <cylinderGeometry args={[0.3, 0.3, 2, 8]} />
-        <meshStandardMaterial color="#8B6F47" />
+        <cylinderGeometry args={[0.3, 0.3, 2, 6]} />
+        <meshStandardMaterial 
+          color="#8B6F47" 
+          roughness={0.9}
+          metalness={0}
+        />
       </mesh>
       
       {/* Koruna - vrstva 1 */}
       <mesh castShadow position={[0, 2.5, 0]}>
-        <coneGeometry args={[1.5, 2, 8]} />
-        <meshStandardMaterial color="#B8D96A" />
+        <coneGeometry args={[1.5, 2, 6]} />
+        <meshStandardMaterial 
+          color="#B8D96A" 
+          roughness={0.85}
+          metalness={0}
+        />
       </mesh>
       
       {/* Koruna - vrstva 2 */}
       <mesh castShadow position={[0, 3.5, 0]}>
-        <coneGeometry args={[1.2, 1.5, 8]} />
-        <meshStandardMaterial color="#C4E072" />
+        <coneGeometry args={[1.2, 1.5, 6]} />
+        <meshStandardMaterial 
+          color="#C4E072" 
+          roughness={0.85}
+          metalness={0}
+        />
       </mesh>
       
       {/* Koruna - vrstva 3 */}
       <mesh castShadow position={[0, 4.3, 0]}>
-        <coneGeometry args={[0.8, 1, 8]} />
-        <meshStandardMaterial color="#D0E87E" />
+        <coneGeometry args={[0.8, 1, 6]} />
+        <meshStandardMaterial 
+          color="#D0E87E" 
+          roughness={0.85}
+          metalness={0}
+        />
       </mesh>
     </group>
   )
@@ -50,13 +66,21 @@ function Building({
       {/* Hlavní budova */}
       <mesh castShadow position={[0, height / 2, 0]}>
         <boxGeometry args={[width, height, depth]} />
-        <meshStandardMaterial color={color} />
+        <meshStandardMaterial 
+          color={color} 
+          roughness={0.8}
+          metalness={0}
+        />
       </mesh>
       
       {/* Střecha */}
       <mesh castShadow position={[0, height + 0.3, 0]}>
         <coneGeometry args={[width * 0.7, 0.8, 4]} />
-        <meshStandardMaterial color="#D4A574" />
+        <meshStandardMaterial 
+          color="#D4A574" 
+          roughness={0.75}
+          metalness={0}
+        />
       </mesh>
       
       {/* Okna */}
@@ -65,11 +89,23 @@ function Building({
           <group key={i}>
             <mesh position={[width / 3, y, depth / 2 + 0.01]}>
               <boxGeometry args={[0.4, 0.4, 0.02]} />
-              <meshStandardMaterial color="#87CEEB" />
+              <meshStandardMaterial 
+                color="#87CEEB" 
+                roughness={0.1}
+                metalness={0.3}
+                emissive="#87CEEB"
+                emissiveIntensity={0.2}
+              />
             </mesh>
             <mesh position={[-width / 3, y, depth / 2 + 0.01]}>
               <boxGeometry args={[0.4, 0.4, 0.02]} />
-              <meshStandardMaterial color="#87CEEB" />
+              <meshStandardMaterial 
+                color="#87CEEB" 
+                roughness={0.1}
+                metalness={0.3}
+                emissive="#87CEEB"
+                emissiveIntensity={0.2}
+              />
             </mesh>
           </group>
         )
@@ -283,12 +319,16 @@ export function Environment() {
       ].map((pos, i) => (
         <mesh 
           key={i} 
-          castShadow 
+          castShadow
           position={new THREE.Vector3(...pos as [number, number, number])}
           rotation={[Math.random(), Math.random(), Math.random()]}
         >
           <boxGeometry args={[0.5, 0.4, 0.5]} />
-          <meshStandardMaterial color="#C4A884" />
+          <meshStandardMaterial 
+            color="#C4A884" 
+            roughness={0.95}
+            metalness={0}
+          />
         </mesh>
       ))}
     </group>

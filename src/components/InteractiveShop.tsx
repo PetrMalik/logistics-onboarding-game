@@ -19,25 +19,43 @@ export function InteractiveShop({ position, isLocked = false, isCompleted = fals
       {/* Základna trafiky - kreslený styl */}
       <mesh castShadow position={[0, 1.5, 0]}>
         <boxGeometry args={[5, 3, 3]} />
-        <meshStandardMaterial color={baseColor} />
+        <meshStandardMaterial 
+          color={baseColor} 
+          roughness={0.8}
+          metalness={0}
+        />
       </mesh>
 
       {/* Štít trafiky */}
       <mesh castShadow position={[0, 3.2, 0]}>
         <boxGeometry args={[5.2, 0.4, 3.2]} />
-        <meshStandardMaterial color={accentColor} />
+        <meshStandardMaterial 
+          color={accentColor} 
+          roughness={0.75}
+          metalness={0}
+        />
       </mesh>
 
       {/* Výloha - velké okno */}
       <mesh position={[2.51, 1.8, 0]}>
         <boxGeometry args={[0.02, 2, 2.5]} />
-        <meshStandardMaterial color="#87CEEB" transparent opacity={0.8} />
+        <meshStandardMaterial 
+          color="#87CEEB" 
+          transparent 
+          opacity={0.8} 
+          roughness={0.1}
+          metalness={0.3}
+        />
       </mesh>
 
       {/* Vstupní dveře */}
-      <mesh position={[0, 0.8, 1.51]}>
+      <mesh castShadow position={[0, 0.8, 1.51]}>
         <boxGeometry args={[1.2, 1.6, 0.1]} />
-        <meshStandardMaterial color="#FFD700" />
+        <meshStandardMaterial 
+          color="#FFD700" 
+          roughness={0.4}
+          metalness={0.2}
+        />
       </mesh>
 
       {/* Klamka */}
